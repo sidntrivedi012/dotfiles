@@ -1,72 +1,219 @@
-set number
-set nowrap
-highlight LineNr ctermfg=white
+source ~/.config/nvim/conf-coc.vim
+
+" ==============================================
+" Generic configs
+set number            " set numbers
+set nowrap            " no wrapping please
+set mouse=a           " ain't a Vimmer yet
+set relativenumber
 set ignorecase
+set colorcolumn=80	" ship good code
+set showcmd
 filetype plugin on
+filetype indent on
+set showtabline=2     
+set foldmethod=indent	" read them up
+set nofoldenable  		" same as above
+set encoding=UTF-8
+set autoread
+set hlsearch
+set clipboard=unnamedplus
+let mapleader = "\<Space>"              " set leader to space
+let maplocalleader = "\<Space>\<Space>" " set local leader to space-space
+" Scrolling
+set scrolloff=10
+set sidescrolloff=15
+set sidescroll=1
+set noswapfile
+let g:session_autosave = 'yes'
+let g:session_autoload = 'yes'
+let g:session_default_to_last = 1
+au BufNewFile,BufRead *.py
+			\ set tabstop=4 |
+			\ set softtabstop=4 |
+			\ set shiftwidth=4 |
+			\ set expandtab |
+			\ set autoindent |
+			\ set colorcolumn=80 |
+			\ set fileformat=unix
 
-" Switch buffers using Alt+Arrow keys
-nnoremap <M-Right> 	:bnext<CR>
-nnoremap <M-Left> 	:bprevious<CR>
+au bufnewfile,bufread *.go
+			\ set tabstop=4 |
+			\ set shiftwidth=4 |
+			\ set expandtab |
+			\ set autoindent |
+			\ set fileformat=unix    
 
-" Indentation
-autocmd Filetype html,css,javascript,ruby,eruby setl sw=2 sts=2 et	" 2 spaces for HTML, CSS, Javascript, Ruby
-autocmd Filetype python setl sw=4 sts=4 et				" 4 spaces for Python
+au bufnewfile,bufread *.c
+			\ set tabstop=4 |
+			\ set softtabstop=4 |
+			\ set shiftwidth=4 |
+			\ set expandtab |
+			\ set autoindent |
+			\ set fileformat=unix
 
-"Easier split navigation
-nnoremap <C-Left>	<C-W><Left><CR>
-nnoremap <C-Right>	<C-W><Right><CR>
-nnoremap <C-Up>		<C-W><Up><CR>
-nnoremap <C-Down>	<C-W><Down><CR>
+au BufNewFile,BufRead *.js,*.vue,*.html,*.css,*.yml,*.json,*.yaml
+			\ set tabstop=2 |
+			\ set softtabstop=2 |
+			\ set shiftwidth=2 |
+			\ set expandtab |
+			\ set autoindent |
+			\ set fileformat=unix
 
-" Plugins
+au BufRead,BufNewFile *.md setlocal textwidth=80
+au BufRead,BufNewFile *.toml setlocal textwidth=80
+" ==============================================
 
+" ==============================================
+" Indentation 
+set smartindent
+set smarttab
+set shiftround
+" ==============================================
+
+" ==============================================
+" PLUGINS
 call plug#begin()
 
+" Tooling
+" sensible defaults
 Plug 'tpope/vim-sensible'
-Plug 'tpope/vim-fugitive'
-Plug 'airblade/vim-gitgutter'
-Plug 'w0rp/ale'
+" Displays function signatures from completions in the command line.
+Plug 'Shougo/echodoc.vim'
+" Automatic pairing of braces etc.
 Plug 'jiangmiao/auto-pairs'
-Plug 'scrooloose/nerdcommenter'
+" Git on steroids
+Plug 'tpope/vim-fugitive'
+" Sorrounding everything with quotes etc
+Plug 'tpope/vim-surround'                         " 
+" Track changes in files and show diff
+Plug 'airblade/vim-gitgutter'
+" The file explorer
+Plug 'preservim/nerdtree'
+" Commenting for nerds
+Plug 'preservim/nerdcommenter'
+" The blue line visible downwards :/ 
+Plug 'itchyny/lightline.vim'
+" Shows the buffers above for each file
+Plug 'mengelbrecht/lightline-bufferline'
+" COC - The hella of a plugin
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+let g:coc_global_extensions = ['coc-emmet', 'coc-css', 'coc-html', 'coc-json', 'coc-prettier']
+" FZF - The powerful file finder
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf.vim'
 
-Plug 'scrooloose/nerdtree'
+" AESTHETICS
+" Gruvbox colorscheme
+Plug 'morhetz/gruvbox'
+" Lines of Indentation (LOI) :P
+Plug 'Yggdroot/indentLine'
+" The file icons
+Plug 'ryanoasis/vim-devicons'
+" Show git diff in file explorer too
 Plug 'Xuyuanp/nerdtree-git-plugin'
 
-Plug 'vim-airline/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
-
+" LANGUAGE TOOLING
+Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 Plug 'pangloss/vim-javascript'
-Plug 'mattn/emmet-vim'
-Plug 'tpope/vim-rails'
-Plug 'fatih/vim-go'
-
+Plug 'tpope/vim-git'
+Plug 'godlygeek/tabular'
+Plug 'plasticboy/vim-markdown'
+Plug 'cespare/vim-toml'
+Plug 'wakatime/vim-wakatime'
 call plug#end()
+" ==============================================
 
-" ----------------------
-" NERDTree Configuration
+" ==============================================
+" COLORS
+set termguicolors           " nice 24 bit colors
+syntax on                   " really needed
+let $NVIM_TUI_ENABLE_TRUE_COLOR=1
+set background=dark
+colorscheme gruvbox
+syntax on
 
-" Start NERDTree if no files were specified
+" ==============================================
+
+" ==============================================
+" Disabling arrow keys ( God help me! )
+map <left> <nop>
+map <right> <nop>
+map <up> <nop>
+map <down> <nop>
+
+imap <up> <nop>
+imap <down> <nop>
+imap <left> <nop>
+imap <right> <nop>
+" ==============================================
+
+" ==============================================
+" USEFUL MAPPINGS
+
+" disappear the highlight when done searching
+nnoremap <silent> <Esc><Esc> <Esc>:nohlsearch<CR><Esc>
+nnoremap <C-p> :Files<CR>
+nnoremap <Leader>b :Buffers<CR>
+nnoremap <Leader>h :History<CR>
+
+" Buffer switching and closing
+map <M-Left> :bp<CR>
+map <M-Right> :bn<CR>
+map <M-w> :bd<CR>
+" ==============================================
+
+" ==============================================
+" ALE Settings
+let g:ale_linters = {'python': ['flake8'], 'javascript': ['eslint']}
+let g:ale_fixers = {'python': ['black'], 'javascript': ['prettier', 'eslint'], 'json': ['prettier'], 'rust': 'rustfmt'}
+let g:ale_fix_on_save = 1
+let g:ale_rust_cargo_use_clippy = 1
+nmap <silent> [c <Plug>(ale_previous_wrap)
+nmap <silent> ]c <Plug>(ale_next_wrap)
+let g:ale_sign_error = '❌'
+let g:ale_sign_warning = '⚠️'
+map <C-J> <C-W>j<C-W>_
+map <C-K> <C-W>k<C-W>_
+nmap <c-h> <c-w>h<c-w><Bar>
+nmap <c-l> <c-w>l<c-w><Bar>
+" ==============================================
+
+" ==============================================
+"Nerd tree
+map <C-x> :NERDTreeToggle<CR>
 autocmd StdinReadPre * let s:std_in=1
-autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
+autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in") | exe 'NERDTree' argv()[0] | wincmd p | ene | exe 'cd '.argv()[0] | endif
 
-" Start NERDTree on opening a directory
-autocmd StdinReadPre * let s:std_in=1
-autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in") | exe 'NERDTree' argv()[0] | wincmd p | ene | endif
+" ==============================================
 
-" Control+N keybinding
-map <C-n> :NERDTreeToggle<CR>
 
-" Close vim if the only window open is a NERDTree
-autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
-" ----------------------
+" ==============================================
+" FZF Settings
+nnoremap <C-p> :FZF<CR>
+" ==============================================
 
-" Airline Configuration
-set laststatus=2				" Set laststatus so that airline appears all the time
-let g:airline_powerline_fonts = 1		" Use powerline symbols
-let g:airline#extensions#tabline#enabled = 1	" Enable tabline for tabs/buffers
 
-" Miscellaneous
-let g:deoplete#enable_at_startup = 1		" Enable Deoplete on startup
-let g:gitgutter_sign_column_always = 1		" Always show gitgutter column
-let g:ale_sign_column_always = 1		" Always show ale column
-let g:airline#extensions#ale#enabled = 1	" Enable ale airline integration
+" ==============================================
+" LIGHTLINE Settings
+let g:lightline = {
+      \ 'active': {
+      \   'left': [ [ 'mode', 'paste' ], [ 'readonly', 'filename', 'modified' ] ]
+      \ },
+      \ 'tabline': {
+      \   'left': [ ['buffers'] ],
+      \   'right': [ ['close'] ]
+      \ },
+      \ 'component_expand': {
+      \   'buffers': 'lightline#bufferline#buffers'
+      \ },
+      \ 'component_type': {
+      \   'buffers': 'tabsel'
+      \ }
+      \ }
+let g:lightline#bufferline#enable_devicons = 1
+let g:lightline#bufferline#show_number = 1
+
+" ==============================================
+
+
