@@ -1,0 +1,45 @@
+{
+  "window.zoomLevel": -1,
+  "editor.fontSize": 17,
+  "editor.wordWrap": "on",
+  "workbench.startupEditor": "newUntitledFile",
+  "editor.multiCursorModifier": "ctrlCmd",
+  "editor.snippetSuggestions": "top",
+  "editor.formatOnPaste": true,
+  "terminal.integrated.fontSize": 15,
+  "emmet.includeLanguages": {
+    "javascript": "javascriptreact",
+    "javascript": "html"
+  },
+  "emmet.syntaxProfiles": {
+    "javascript": "jsx"
+  },
+  "editor.formatOnSave": true,
+  "workbench.colorCustomizations": {
+    "terminal.foreground": "#20C20E",
+    "terminal.background": "#000000"
+  },
+  "editor.fontFamily": "Fira Code",
+  "editor.fontLigatures": true,
+  "workbench.iconTheme": "material-icon-theme",
+  "editor.suggestSelection": "first",
+  "vsintellicode.modify.editor.suggestSelection": "automaticallyOverrodeDefaultValue",
+  "html.format.indentInnerHtml": true,
+  "html.autoClosingTags": true,
+  "html.suggest.html5": true,
+  "terminal.integrated.rendererType": "dom",
+  "[go]": {
+    "editor.formatOnSave": true
+  },
+  "javascript.updateImportsOnFileMove.enabled": "always",
+  "vsicons.dontShowNewVersionMessage": true,
+  "go.useLanguageServer": true,
+  "prettier.requireConfig": true,
+  "files.autoSave": "afterDelay",
+  "terminal.explorerKind": "external",
+  "terminal.external.osxExec": "iTerm.app",
+  "terminal.integrated.cursorBlinking": true,
+  "terminal.integrated.enableBold": true,
+  "terminal.integrated.fontFamily": "'Roboto Mono', 'Knack'",
+  "terminal.integrated.rightClickCopyPaste": true,
+}
