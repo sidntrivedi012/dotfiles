@@ -7,7 +7,6 @@ set nowrap            " no wrapping please
 set mouse=a           " ain't a Vimmer yet
 set relativenumber
 set ignorecase
-set colorcolumn=80	" ship good code
 set showcmd
 filetype plugin on
 filetype indent on
@@ -26,7 +25,7 @@ set sidescrolloff=15
 set sidescroll=1
 set noswapfile
 let g:session_autosave = 'yes'
-let g:session_autoload = 'yes'
+let gsession_autoload = 'yes'
 let g:session_default_to_last = 1
 au BufNewFile,BufRead *.py
 			\ set tabstop=4 |
@@ -102,7 +101,7 @@ Plug 'mengelbrecht/lightline-bufferline'
 " COC - The hella of a plugin
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 " FZF - The powerful file finder
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf', { 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 " All Language packs in one plugin.
 Plug 'sheerun/vim-polyglot'
@@ -110,12 +109,12 @@ Plug 'sheerun/vim-polyglot'
 Plug 'dense-analysis/ale'
 
 " AESTHETICS
-" Gruvbox colorscheme
-Plug 'morhetz/gruvbox'
+" Molokai colorscheme
+Plug 'fatih/molokai'
 " Lines of Indentation (LOI) :P
 Plug 'Yggdroot/indentLine'
-" The file icons
-Plug 'ryanoasis/vim-devicons'
+" The colored file icons
+Plug 'kyazdani42/nvim-web-devicons'
 " Show git diff in file explorer too
 Plug 'Xuyuanp/nerdtree-git-plugin'
 
@@ -135,7 +134,8 @@ set termguicolors           " nice 24 bit colors
 syntax on                   " really needed
 let $NVIM_TUI_ENABLE_TRUE_COLOR=1
 set background=dark
-colorscheme gruvbox
+let g:one_allow_italics = 1
+colorscheme molokai
 syntax on
 
 
@@ -155,15 +155,14 @@ imap <right> <nop>
 " USEFUL MAPPINGS
 
 " FZF Settings
-nnoremap <C-p> :FZF<CR>
-
+" nnoremap <Leader>p :FZF<CR>
+nnoremap <Leader>p :Files<CR>
 " Tags based searching
 nnoremap <Leader>t :BTags<CR>
 nnoremap <Leader>T :Tags<CR>
 
 " disappear the highlight when done searching
 nnoremap <silent> <Esc><Esc> <Esc>:nohlsearch<CR><Esc>
-nnoremap <C-p> :Files<CR>
 map <Leader>b :Buffers<CR>
 nnoremap <Leader>h :History<CR>
 
@@ -186,7 +185,7 @@ let g:indentLine_fileTypeExclude = ['markdown']
 
 " ==============================================
 "Nerd tree
-map <C-g> :NERDTreeToggle<CR>
+map <Leader>g :NERDTreeToggle<CR>
 autocmd StdinReadPre * let s:std_in=1
 autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in") | exe 'NERDTree' argv()[0] | wincmd p | ene | exe 'cd '.argv()[0] | endif
 
@@ -195,7 +194,7 @@ autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in
 " LIGHTLINE Settings
 let g:lightline = {
       \ 'active': {
-      \   'left': [ [ 'mode', 'paste' ], [ 'readonly', 'filename', 'modified' ] ],
+      \   'left': [ [ 'mode', 'paste' ], [ 'gitbranch', 'readonly', 'filename', 'modified' ] ],
       \ },
       \ 'tabline': {
       \   'left': [ ['buffers'] ],
@@ -206,11 +205,18 @@ let g:lightline = {
       \ },
       \ 'component_type': {
       \   'buffers': 'tabsel'
-      \ }
+      \ },
+      \ 'component_function': {
+      \   'gitbranch': 'FugitiveHead'
+      \ },
+      \ 'separator': { 'left': '⮀', 'right': '⮂' },
+      \ 'subseparator': { 'left': '⮁', 'right': '⮃' }
       \ }
 let g:lightline#bufferline#enable_devicons = 1
 let g:lightline#bufferline#show_number = 1
-
+let g:lightline#bufferline#enable_nerdfont = 1
+let g:lightline#bufferline#unicode_symbols = 1
+let g:lightline#bufferline#filename_modifier = ':t'
 
 " ==============================================
 
