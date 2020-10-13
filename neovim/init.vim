@@ -25,7 +25,7 @@ set sidescrolloff=15
 set sidescroll=1
 set noswapfile
 let g:session_autosave = 'yes'
-let gsession_autoload = 'yes'
+let g:session_autoload = 'yes'
 let g:session_default_to_last = 1
 au BufNewFile,BufRead *.py
 			\ set tabstop=4 |
