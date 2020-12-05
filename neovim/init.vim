@@ -83,7 +83,7 @@ Plug 'tpope/vim-sensible'
 " Displays function signatures from completions in the command line.
 Plug 'Shougo/echodoc.vim'
 " Automatic pairing of braces etc.
-Plug 'jiangmiao/auto-pairs'
+" Plug 'jiangmiao/auto-pairs'
 " Git on steroids
 Plug 'tpope/vim-fugitive'
 " Sorrounding everything with quotes etc
@@ -91,7 +91,9 @@ Plug 'tpope/vim-surround'                         "
 " Track changes in files and show diff
 Plug 'airblade/vim-gitgutter'
 " The file explorer
-Plug 'preservim/nerdtree'
+" Plug 'preservim/nerdtree'
+" Chadtree- better than nerdtree
+Plug 'ms-jpq/chadtree', {'branch': 'chad', 'do': ':UpdateRemotePlugins'}
 " Commenting for nerds
 Plug 'preservim/nerdcommenter'
 " The blue line visible downwards :/
@@ -121,6 +123,10 @@ Plug 'Xuyuanp/nerdtree-git-plugin'
 " LANGUAGE TOOLING
 Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 Plug 'pangloss/vim-javascript'
+Plug 'moll/vim-node'
+Plug 'elzr/vim-json'
+Plug 'ekalinin/Dockerfile.vim'
+Plug 'othree/html5.vim'
 Plug 'tpope/vim-git'
 Plug 'godlygeek/tabular'
 Plug 'plasticboy/vim-markdown'
@@ -151,6 +157,12 @@ imap <down> <nop>
 imap <left> <nop>
 imap <right> <nop>
 
+"===============================================
+
+nnoremap <silent> <C-Right> <c-w>l
+nnoremap <silent> <C-Left> <c-w>h
+nnoremap <silent> <C-Up> <c-w>k
+nnoremap <silent> <C-Down> <c-w>j
 " ==============================================
 " USEFUL MAPPINGS
 
@@ -179,15 +191,20 @@ let g:ale_fix_on_save = 1
 let g:ale_rust_cargo_use_clippy = 1
 nnoremap ]c :ALENextWrap<CR>
 nnoremap [c :ALEPreviousWrap<CR>
-let g:ale_sign_error = '❌'
-let g:ale_sign_warning = '⚠️'
+let g:ale_sign_error = '‚ùå'
+let g:ale_sign_warning = '‚ö†Ô∏è'
 let g:indentLine_fileTypeExclude = ['markdown']
+
+
+" =============================================
+" Chadtree setting
+nnoremap <leader>g <cmd>CHADopen<cr>
 
 " ==============================================
 "Nerd tree
-map <Leader>g :NERDTreeToggle<CR>
-autocmd StdinReadPre * let s:std_in=1
-autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in") | exe 'NERDTree' argv()[0] | wincmd p | ene | exe 'cd '.argv()[0] | endif
+" map <Leader>g :NERDTreeToggle<CR>
+" autocmd StdinReadPre * let s:std_in=1
+" autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in") | exe 'NERDTree' argv()[0] | wincmd p | ene | exe 'cd '.argv()[0] | endif
 
 " ==============================================
 
@@ -207,13 +224,19 @@ let g:lightline = {
       \   'buffers': 'tabsel'
       \ },
       \ 'component_function': {
-      \   'gitbranch': 'FugitiveHead'
+      \   'gitbranch': 'FugitiveHead',
+      \   'filename': 'LightlineFilename'
       \ },
-      \ 'separator': { 'left': '⮀', 'right': '⮂' },
-      \ 'subseparator': { 'left': '⮁', 'right': '⮃' }
+      \ 'separator': { 'left': '‚ÆÄ', 'right': '‚ÆÇ' },
+      \ 'subseparator': { 'left': '‚ÆÅ', 'right': '‚ÆÉ' }
       \ }
+
+function! LightlineFilename()
+  return expand('%')
+endfunction
+
 let g:lightline#bufferline#enable_devicons = 1
-let g:lightline#bufferline#show_number = 1
+let g:lightline#bufferline#show_number = 2
 let g:lightline#bufferline#enable_nerdfont = 1
 let g:lightline#bufferline#unicode_symbols = 1
 let g:lightline#bufferline#filename_modifier = ':t'
@@ -232,3 +255,17 @@ nnoremap <C-L> <C-W><C-L>
 nnoremap <C-H> <C-W><C-H>
 set splitbelow
 set splitright
+
+" =============================================
+" Move easily to the next error
+nnoremap <leader>l :lnext<CR>
+nnoremap <leader>h :lprevious<CR>
+
+" =============================================
+" Language configs
+"
+" vim-javascript
+let g:javascript_plugin_flow = 1
+
+" vim-json
+let g:vim_json_syntax_conceal = 0
