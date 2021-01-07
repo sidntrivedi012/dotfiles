@@ -1,17 +1,24 @@
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
+export PATH="$PATH:/usr/local/bin"
 export GOPATH=$HOME/go
 export PATH=$GOPATH/bin:$PATH
+export PATH="/usr/local/opt/grep/libexec/gnubin:$PATH"
 
 # Path to your oh-my-zsh installation.
 export ZSH="/Users/sidntrivedi012/.oh-my-zsh"
+
+# GPG env var
+export GPG_TTY=`tty`
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
- ZSH_THEME="powerlevel9k/powerlevel9k"
+ # ZSH_THEME="powerlevel10k/powerlevel10k"
 
+#ZSH_THEME="powerlevel9k/powerlevel9k"
+ #POWERLEVEL9K_MODE='nerdfont-complete'
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
 # a theme from this variable instead of looking in ~/.oh-my-zsh/themes/
@@ -106,62 +113,53 @@ source $ZSH/oh-my-zsh.sh
 #command line aliases
 alias cl="clear"
 alias srczsh="source ~/.zshrc"
-alias openzsh="open ~/.zshrc"  
 alias code="open -a Visual\ Studio\ Code.app"
-
+alias vi="nvim"
+alias vim="nvim"
+alias v="nvim"
 
 #git aliases
 alias gin="git init"
-Alias gcl="git clone"
+alias glog="git log --oneline"
+alias gcl="git clone"
 alias ga="git add"
-alias gci="git commit -m"
-alias gpo="git push -u origin" 
+alias gci="git commit -S -s -m"
+alias gpo="git push -u origin"
 alias gpom="git push -u origin master"
-alias gpul= "git pull upstream master"
+alias gpum= "git pull upstream master"
 alias gpu="git pull upstream"
-alias gcon="git checkout -b"
+alias gcob="git checkout -b"
 alias grhard="git reset --hard"
 alias grsoft="git reset	--soft"
 
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/Users/sidntrivedi012/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/sidntrivedi012/google-cloud-sdk/path.zsh.inc'; fi
 
-POWERLEVEL9K_CONTEXT_TEMPLATE='%n'
-POWERLEVEL9K_CONTEXT_DEFAULT_FOREGROUND='white'
-POWERLEVEL9K_BATTERY_CHARGING='yellow'
-POWERLEVEL9K_BATTERY_CHARGED='green'
-POWERLEVEL9K_BATTERY_DISCONNECTED='$DEFAULT_COLOR'
-POWERLEVEL9K_BATTERY_LOW_THRESHOLD='10'
-POWERLEVEL9K_BATTERY_LOW_COLOR='red'
-POWERLEVEL9K_MULTILINE_FIRST_PROMPT_PREFIX=''
-#POWERLEVEL9K_BATTERY_STAGES=($'\u2581 ' $'\u2582 ' $'\u2583 ' $'\u2584 ' $'\u2585 ' $'\u2586 ' $'\u2587 ' $'\u2588 ')
-POWERLEVEL9K_BATTERY_ICON='\uf1e6 '
-POWERLEVEL9K_PROMPT_ON_NEWLINE=true
-#POWERLEVEL9K_MULTILINE_LAST_PROMPT_PREFIX="❱❱❱ "
-POWERLEVEL9K_MULTILINE_LAST_PROMPT_PREFIX="%F{014}\u2570%F{cyan}\uF054%F{073}\uF054%F{109}\uF054%f "
-POWERLEVEL9K_VCS_MODIFIED_BACKGROUND='yellow'
-POWERLEVEL9K_VCS_UNTRACKED_BACKGROUND='yellow'
-POWERLEVEL9K_VCS_UNTRACKED_ICON='?'
+# The next line enables shell command completion for gcloud.
+if [ -f '/Users/sidntrivedi012/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/sidntrivedi012/google-cloud-sdk/completion.zsh.inc'; fi
 
-POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(os_icon context battery dir vcs)
-POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status time ip vpn_ip ram load background_jobs)
+# fzf
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
-#POWERLEVEL9K_SHORTEN_STRATEGY="truncate_middle"
-POWERLEVEL9K_SHORTEN_DIR_LENGTH=1
+# Node version manager stuff
+export NVM_DIR="/Users/sidntrivedi012/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+source ~/.nvm/nvm.sh
 
-POWERLEVEL9K_TIME_FORMAT="%D{\uf017 %H:%M \uf073 %d/%m/%y}"
-POWERLEVEL9K_TIME_BACKGROUND='white'
-POWERLEVEL9K_RAM_BACKGROUND='yellow'
-POWERLEVEL9K_LOAD_CRITICAL_BACKGROUND="white"
-POWERLEVEL9K_LOAD_WARNING_BACKGROUND="white"
-POWERLEVEL9K_LOAD_NORMAL_BACKGROUND="white"
-POWERLEVEL9K_LOAD_CRITICAL_FOREGROUND="red"
-POWERLEVEL9K_LOAD_WARNING_FOREGROUND="yellow"
-POWERLEVEL9K_LOAD_NORMAL_FOREGROUND="black"
-POWERLEVEL9K_LOAD_CRITICAL_VISUAL_IDENTIFIER_COLOR="red"
-POWERLEVEL9K_LOAD_WARNING_VISUAL_IDENTIFIER_COLOR="yellow"
-POWERLEVEL9K_LOAD_NORMAL_VISUAL_IDENTIFIER_COLOR="green"
-POWERLEVEL9K_HOME_ICON=''
-POWERLEVEL9K_HOME_SUB_ICON=''
-POWERLEVEL9K_FOLDER_ICON=''
-POWERLEVEL9K_STATUS_VERBOSE=true
-POWERLEVEL9K_STATUS_CROSS=true
-POWERLEVEL9K_TIME_ICON=""
+# marvin
+export CODE_PATH=/code
+export TOOLBOX_PATH=/toolbox
+
+# starship tooling
+eval "$(starship init zsh)"
+export STARSHIP_CONFIG=~/.config/starship.toml
+export STARSHIP_CACHE=~/.starship/cache
+
+# asgard
+if command -v pyenv 1>/dev/null 2>&1; then
+  eval "$(pyenv init -)"
+fi
+
+export PATH="$HOME/.pyenv/bin:$PATH"
+eval "$(pyenv init -)"
+eval "$(pyenv virtualenv-init -)"
