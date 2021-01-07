@@ -51,7 +51,7 @@ au bufnewfile,bufread *.c
 			\ set autoindent |
 			\ set fileformat=unix
 
-au BufNewFile,BufRead *.js,*.vue,*.html,*.css,*.yml,*.json,*.yaml
+au BufNewFile,BufRead *.js,*.vue,*.html,*.css,*.yml,*.json
 			\ set tabstop=2 |
 			\ set softtabstop=2 |
 			\ set shiftwidth=2 |
@@ -73,6 +73,10 @@ set smartindent
 set smarttab
 set shiftround
 
+" add yaml stuffs
+au! BufNewFile,BufReadPost *.{yaml,yml} set filetype=yaml foldmethod=indent
+autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab
+
 " ==============================================
 " PLUGINS
 call plug#begin()
@@ -89,8 +93,7 @@ Plug 'tpope/vim-surround'                         "
 " Track changes in files and show diff
 Plug 'airblade/vim-gitgutter'
 " The file explorer
-" Plug 'preservim/nerdtree'
-" Chadtree- better than nerdtree
+" Chadtree - better than nerdtree
 Plug 'ms-jpq/chadtree', {'branch': 'chad', 'do': ':UpdateRemotePlugins'}
 " Commenting for nerds
 Plug 'preservim/nerdcommenter'
@@ -132,6 +135,7 @@ Plug 'cespare/vim-toml'
 Plug 'wakatime/vim-wakatime'
 call plug#end()
 
+
 " ==============================================
 " COLORS
 set termguicolors           " nice 24 bit colors
@@ -166,7 +170,7 @@ nnoremap <silent> <C-Down> <c-w>j
 
 " FZF Settings
 " nnoremap <Leader>p :FZF<CR>
-nnoremap <Leader>p :Files<CR>
+nnoremap <Leader>p :GFiles<CR>
 " Tags based searching
 nnoremap <Leader>t :BTags<CR>
 nnoremap <Leader>T :Tags<CR>
@@ -179,7 +183,7 @@ nnoremap <Leader>h :History<CR>
 " Buffer switching and closing
 map <M-Left> :bp<CR>
 map <M-Right> :bn<CR>
-map <M-w> :bd<CR>
+map <M-Down> :bd<CR>
 
 " ==============================================
 " ALE Settings
