@@ -74,6 +74,7 @@ set shiftround
 " add yaml stuffs
 au! BufNewFile,BufReadPost *.{yaml,yml} set filetype=yaml foldmethod=indent
 autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab
+let g:ale_disable_lsp = 1
 
 " ==============================================
 " PLUGINS
@@ -196,7 +197,7 @@ nnoremap <leader>fh <cmd>Telescope help_tags<cr>
 
 " ==============================================
 " ALE Settings
-let g:ale_linters = {'python': ['flake8'], 'javascript': ['eslint','tsserver']}
+let g:ale_linters = {'python': ['flake8'], 'javascript': ['eslint']}
 let g:ale_fixers = {'python': ['black'], 'javascript': ['prettier', 'eslint'], 'json': ['prettier'], 'rust': 'rustfmt','html': ['prettier']}
 let g:ale_fix_on_save = 1
 let g:ale_rust_cargo_use_clippy = 1
@@ -205,7 +206,7 @@ nnoremap [c :ALEPreviousWrap<CR>
 let g:ale_sign_error = '‚ùå'
 let g:ale_sign_warning = '‚ö†Ô∏è'
 let g:indentLine_fileTypeExclude = ['markdown']
-
+let g:ale_linters_explicit = 1
 
 " =============================================
 " Chadtree setting
