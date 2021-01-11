@@ -1,4 +1,5 @@
-{
+" Not being used. Neovim lsp ftw.
+{ 
   "suggest.echodocSupport": true,
   "suggest.maxCompleteItemCount": 20,
   "coc.preferences.formatOnSaveFiletypes": [
