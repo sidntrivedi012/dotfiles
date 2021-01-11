@@ -1,5 +1,3 @@
-source ~/.config/nvim/conf-coc.vim
-
 " ==============================================
 " Generic configs
 set number            " set numbers
@@ -101,8 +99,6 @@ Plug 'preservim/nerdcommenter'
 Plug 'itchyny/lightline.vim'
 " Shows the buffers above for each file
 Plug 'mengelbrecht/lightline-bufferline'
-" COC - The hella of a plugin
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
 " FZF - The powerful file finder
 Plug 'junegunn/fzf', { 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
@@ -122,6 +118,8 @@ Plug 'kyazdani42/nvim-web-devicons'
 Plug 'Xuyuanp/nerdtree-git-plugin'
 
 " LANGUAGE TOOLING
+Plug 'neovim/nvim-lspconfig'
+Plug 'nvim-lua/completion-nvim'
 Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 Plug 'pangloss/vim-javascript'
 Plug 'moll/vim-node'
@@ -271,3 +269,23 @@ let g:javascript_plugin_flow = 1
 
 " vim-json
 let g:vim_json_syntax_conceal = 0
+
+" Neovim LSP and its completion configs
+lua << EOF
+require'lspconfig'.gopls.setup{}
+require'lspconfig'.tsserver.setup{}
+EOF
+
+autocmd BufEnter * lua require'completion'.on_attach()
+
+" Use <Tab> and <S-Tab> to navigate through popup menu
+inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
+inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+
+" Set completeopt to have a better completion experience
+set completeopt=menuone,noinsert,noselect
+
+" Avoid showing message extra message when using completion
+set shortmess+=c
+
+autocmd Filetype * setlocal omnifunc=v:lua.vim.lsp.omnifunc
