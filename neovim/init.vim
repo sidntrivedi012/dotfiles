@@ -123,17 +123,18 @@ Plug 'nvim-telescope/telescope.nvim'
 " LANGUAGE TOOLING
 Plug 'neovim/nvim-lspconfig'
 Plug 'nvim-lua/completion-nvim'
-Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+" Disable tree-sitter until its stable
+" Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
-" Plug 'pangloss/vim-javascript'
-" Plug 'moll/vim-node'
-" Plug 'elzr/vim-json'
+Plug 'pangloss/vim-javascript'
+Plug 'moll/vim-node'
+Plug 'elzr/vim-json'
 Plug 'ekalinin/Dockerfile.vim'
-" Plug 'othree/html5.vim'
+Plug 'othree/html5.vim'
 Plug 'tpope/vim-git'
 Plug 'godlygeek/tabular'
 Plug 'plasticboy/vim-markdown'
-" Plug 'cespare/vim-toml'
+Plug 'cespare/vim-toml'
 Plug 'wakatime/vim-wakatime'
 call plug#end()
 
@@ -300,14 +301,3 @@ set completeopt=menuone,noinsert,noselect
 set shortmess+=c
 
 autocmd Filetype * setlocal omnifunc=v:lua.vim.lsp.omnifunc
-
-" ==============================================
-" Neovim tree-sitter config
-lua <<EOF
-require'nvim-treesitter.configs'.setup {
-  ensure_installed = "maintained", -- one of "all", "maintained" (parsers with maintainers), or a list of languages
-  highlight = {
-    enable = true,              -- false will disable the whole extension
-  },
-}
-EOF
