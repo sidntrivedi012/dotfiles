@@ -14,6 +14,7 @@ set nofoldenable  		" same as above
 set encoding=UTF-8
 set autoread
 set hlsearch
+set nocompatible
 set clipboard=unnamedplus
 let mapleader = "\<Space>"              " set leader to space
 let maplocalleader = "\<Space>\<Space>" " set local leader to space-space
@@ -76,6 +77,7 @@ au! BufNewFile,BufReadPost *.{yaml,yml} set filetype=yaml foldmethod=indent
 autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab
 let g:ale_disable_lsp = 1
 
+
 " ==============================================
 " PLUGINS
 call plug#begin()
@@ -83,12 +85,12 @@ call plug#begin()
 " Tooling
 " sensible defaults
 Plug 'tpope/vim-sensible'
-" Displays function signatures from completions in the command line.
-Plug 'Shougo/echodoc.vim'
 " Git on steroids
 Plug 'tpope/vim-fugitive'
 " Sorrounding everything with quotes etc
 Plug 'tpope/vim-surround'                         "
+"Automatic pairing brackets etc.
+Plug 'jiangmiao/auto-pairs'
 " Track changes in files and show diff
 Plug 'airblade/vim-gitgutter'
 " The file explorer
@@ -113,8 +115,6 @@ Plug 'fatih/molokai'
 Plug 'Yggdroot/indentLine'
 " The colored file icons
 Plug 'kyazdani42/nvim-web-devicons'
-" Show git diff in file explorer too
-Plug 'Xuyuanp/nerdtree-git-plugin'
 " Telescope for the intuitive UI of file finding etc.
 Plug 'nvim-lua/popup.nvim'
 Plug 'nvim-lua/plenary.nvim'
@@ -129,6 +129,7 @@ Plug 'nvim-lua/completion-nvim'
 " Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 
 " Language Packs
+Plug 'sheerun/vim-polyglot'
 Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 Plug 'pangloss/vim-javascript'
 Plug 'moll/vim-node'
@@ -212,12 +213,6 @@ let g:ale_linters_explicit = 1
 " =============================================
 " Chadtree setting
 nnoremap <leader>g <cmd>CHADopen<cr>
-
-" ==============================================
-"Nerd tree
-" map <Leader>g :NERDTreeToggle<CR>
-" autocmd StdinReadPre * let s:std_in=1
-" autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in") | exe 'NERDTree' argv()[0] | wincmd p | ene | exe 'cd '.argv()[0] | endif
 
 " ==============================================
 
