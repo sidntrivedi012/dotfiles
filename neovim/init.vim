@@ -103,9 +103,7 @@ Plug 'mengelbrecht/lightline-bufferline'
 " FZF - The powerful file finder
 Plug 'junegunn/fzf', { 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
-" All Language packs in one plugin.
-Plug 'sheerun/vim-polyglot'
-" Linting and checking syntax asynchronously
+" Ale for using linters like eslint, flake8 etc.
 Plug 'dense-analysis/ale'
 
 " AESTHETICS
@@ -117,26 +115,29 @@ Plug 'Yggdroot/indentLine'
 Plug 'kyazdani42/nvim-web-devicons'
 " Show git diff in file explorer too
 Plug 'Xuyuanp/nerdtree-git-plugin'
+" Telescope for the intuitive UI of file finding etc.
 Plug 'nvim-lua/popup.nvim'
 Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim'
 
 " LANGUAGE TOOLING
+
+" Amazing Neovim LSP
 Plug 'neovim/nvim-lspconfig'
 Plug 'nvim-lua/completion-nvim'
 " Disable tree-sitter until its stable
 " Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+
+" Language Packs
 Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 Plug 'pangloss/vim-javascript'
 Plug 'moll/vim-node'
 Plug 'elzr/vim-json'
 Plug 'ekalinin/Dockerfile.vim'
 Plug 'othree/html5.vim'
-Plug 'tpope/vim-git'
 Plug 'godlygeek/tabular'
 Plug 'plasticboy/vim-markdown'
 Plug 'cespare/vim-toml'
-Plug 'wakatime/vim-wakatime'
 call plug#end()
 
 
