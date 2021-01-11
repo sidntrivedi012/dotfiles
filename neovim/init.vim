@@ -116,20 +116,24 @@ Plug 'Yggdroot/indentLine'
 Plug 'kyazdani42/nvim-web-devicons'
 " Show git diff in file explorer too
 Plug 'Xuyuanp/nerdtree-git-plugin'
+Plug 'nvim-lua/popup.nvim'
+Plug 'nvim-lua/plenary.nvim'
+Plug 'nvim-telescope/telescope.nvim'
 
 " LANGUAGE TOOLING
 Plug 'neovim/nvim-lspconfig'
 Plug 'nvim-lua/completion-nvim'
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
-Plug 'pangloss/vim-javascript'
-Plug 'moll/vim-node'
-Plug 'elzr/vim-json'
+" Plug 'pangloss/vim-javascript'
+" Plug 'moll/vim-node'
+" Plug 'elzr/vim-json'
 Plug 'ekalinin/Dockerfile.vim'
-Plug 'othree/html5.vim'
+" Plug 'othree/html5.vim'
 Plug 'tpope/vim-git'
 Plug 'godlygeek/tabular'
 Plug 'plasticboy/vim-markdown'
-Plug 'cespare/vim-toml'
+" Plug 'cespare/vim-toml'
 Plug 'wakatime/vim-wakatime'
 call plug#end()
 
@@ -182,6 +186,12 @@ nnoremap <Leader>h :History<CR>
 map <M-Left> :bp<CR>
 map <M-Right> :bn<CR>
 map <M-Down> :bd<CR>
+
+" Find files using Telescope command-line sugar.
+nnoremap <leader>ff <cmd>Telescope find_files<cr>
+nnoremap <leader>fg <cmd>Telescope live_grep<cr>
+nnoremap <leader>fb <cmd>Telescope buffers<cr>
+nnoremap <leader>fh <cmd>Telescope help_tags<cr>
 
 " ==============================================
 " ALE Settings
@@ -270,6 +280,7 @@ let g:javascript_plugin_flow = 1
 " vim-json
 let g:vim_json_syntax_conceal = 0
 
+" =============================================
 " Neovim LSP and its completion configs
 lua << EOF
 require'lspconfig'.gopls.setup{}
@@ -289,3 +300,14 @@ set completeopt=menuone,noinsert,noselect
 set shortmess+=c
 
 autocmd Filetype * setlocal omnifunc=v:lua.vim.lsp.omnifunc
+
+" ==============================================
+" Neovim tree-sitter config
+lua <<EOF
+require'nvim-treesitter.configs'.setup {
+  ensure_installed = "maintained", -- one of "all", "maintained" (parsers with maintainers), or a list of languages
+  highlight = {
+    enable = true,              -- false will disable the whole extension
+  },
+}
+EOF
