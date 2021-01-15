@@ -14,6 +14,8 @@ set nofoldenable  		" same as above
 set encoding=UTF-8
 set autoread
 set hlsearch
+" Don't hide the conceal features in markdown
+set conceallevel=0
 set nocompatible
 set clipboard=unnamedplus
 let mapleader = "\<Space>"              " set leader to space
@@ -129,7 +131,6 @@ Plug 'nvim-lua/completion-nvim'
 " Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 
 " Language Packs
-Plug 'sheerun/vim-polyglot'
 Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 Plug 'pangloss/vim-javascript'
 Plug 'moll/vim-node'
@@ -298,3 +299,13 @@ set completeopt=menuone,noinsert,noselect
 set shortmess+=c
 
 autocmd Filetype * setlocal omnifunc=v:lua.vim.lsp.omnifunc
+
+nnoremap <silent> <c-]> <cmd>lua vim.lsp.buf.definition()<CR>
+nnoremap <silent> K     <cmd>lua vim.lsp.buf.hover()<CR>
+nnoremap <silent> gD    <cmd>lua vim.lsp.buf.implementation()<CR>
+nnoremap <silent> <c-k> <cmd>lua vim.lsp.buf.signature_help()<CR>
+nnoremap <silent> 1gD   <cmd>lua vim.lsp.buf.type_definition()<CR>
+nnoremap <silent> gr    <cmd>lua vim.lsp.buf.references()<CR>
+nnoremap <silent> g0    <cmd>lua vim.lsp.buf.document_symbol()<CR>
+nnoremap <silent> gW    <cmd>lua vim.lsp.buf.workspace_symbol()<CR>
+nnoremap <silent> gd    <cmd>lua vim.lsp.buf.declaration()<CR>
