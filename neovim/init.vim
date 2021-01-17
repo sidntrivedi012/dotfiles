@@ -14,7 +14,7 @@ set nofoldenable  		" same as above
 set encoding=UTF-8
 set autoread
 set hlsearch
-" Don't hide the conceal features in markdown
+" Don't hide the conceal features in markdownt
 set conceallevel=0
 set nocompatible
 set clipboard=unnamedplus
@@ -102,8 +102,6 @@ Plug 'ms-jpq/chadtree', {'branch': 'chad', 'do': ':UpdateRemotePlugins'}
 Plug 'preservim/nerdcommenter'
 " The blue line visible downwards :/
 Plug 'itchyny/lightline.vim'
-" Shows the buffers above for each file
-Plug 'mengelbrecht/lightline-bufferline'
 " FZF - The powerful file finder
 Plug 'junegunn/fzf', { 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
@@ -112,11 +110,16 @@ Plug 'dense-analysis/ale'
 
 " AESTHETICS
 " Molokai colorscheme
-Plug 'fatih/molokai'
+" Plug 'fatih/molokai'
+" Doom Emacs colorscheme, let's try it
+Plug 'romgrk/doom-one.vim'
 " Lines of Indentation (LOI) :P
 Plug 'Yggdroot/indentLine'
 " The colored file icons
 Plug 'kyazdani42/nvim-web-devicons'
+" Improve bufferline, using barbar until it works
+" Plug 'akinsho/nvim-bufferline.lua'
+Plug 'romgrk/barbar.nvim'
 " Telescope for the intuitive UI of file finding etc.
 Plug 'nvim-lua/popup.nvim'
 Plug 'nvim-lua/plenary.nvim'
@@ -142,7 +145,6 @@ Plug 'plasticboy/vim-markdown'
 Plug 'cespare/vim-toml'
 call plug#end()
 
-
 " ==============================================
 " COLORS
 set termguicolors           " nice 24 bit colors
@@ -150,9 +152,8 @@ syntax on                   " really needed
 let $NVIM_TUI_ENABLE_TRUE_COLOR=1
 set background=dark
 let g:one_allow_italics = 1
-colorscheme molokai
+colorscheme doom-one
 syntax on
-
 
 " ==============================================
 " Disabling arrow keys ( God help me! )
