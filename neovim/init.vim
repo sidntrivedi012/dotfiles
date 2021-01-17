@@ -79,7 +79,6 @@ au! BufNewFile,BufReadPost *.{yaml,yml} set filetype=yaml foldmethod=indent
 autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab
 let g:ale_disable_lsp = 1
 
-
 " ==============================================
 " PLUGINS
 call plug#begin()
@@ -96,8 +95,6 @@ Plug 'jiangmiao/auto-pairs'
 " Track changes in files and show diff
 Plug 'airblade/vim-gitgutter'
 " The file explorer
-" Chadtree - better than nerdtree
-Plug 'ms-jpq/chadtree', {'branch': 'chad', 'do': ':UpdateRemotePlugins'}
 " Commenting for nerds
 Plug 'preservim/nerdcommenter'
 " The blue line visible downwards :/
@@ -105,33 +102,32 @@ Plug 'itchyny/lightline.vim'
 " FZF - The powerful file finder
 Plug 'junegunn/fzf', { 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
-" Ale for using linters like eslint, flake8 etc.
-Plug 'dense-analysis/ale'
 
 " AESTHETICS
 " Molokai colorscheme
-" Plug 'fatih/molokai'
+Plug 'fatih/molokai'
 " Doom Emacs colorscheme, let's try it
-Plug 'romgrk/doom-one.vim'
+" Plug 'romgrk/doom-one.vim'
 " Lines of Indentation (LOI) :P
 Plug 'Yggdroot/indentLine'
 " The colored file icons
 Plug 'kyazdani42/nvim-web-devicons'
-" Improve bufferline, using barbar until it works
+" Improved bufferline, using barbar until it works
 " Plug 'akinsho/nvim-bufferline.lua'
 Plug 'romgrk/barbar.nvim'
 " Telescope for the intuitive UI of file finding etc.
 Plug 'nvim-lua/popup.nvim'
 Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim'
+" neovim-treesitter
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 
 " LANGUAGE TOOLING
-
 " Amazing Neovim LSP
 Plug 'neovim/nvim-lspconfig'
 Plug 'nvim-lua/completion-nvim'
-" Disable tree-sitter until its stable
-" Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+" Ale to run linters on code and fix
+Plug 'dense-analysis/ale'
 
 " Language Packs
 Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
@@ -152,7 +148,7 @@ syntax on                   " really needed
 let $NVIM_TUI_ENABLE_TRUE_COLOR=1
 set background=dark
 let g:one_allow_italics = 1
-colorscheme doom-one
+colorscheme molokai
 syntax on
 
 " ==============================================
@@ -191,30 +187,17 @@ nnoremap <Leader>h :History<CR>
 " Buffer switching and closing
 map <M-Left> :bp<CR>
 map <M-Right> :bn<CR>
-map <M-Down> :bd<CR>
+map <M-Down> :BufferClose<CR>
+" Re-order to previous/next
+nnoremap <silent> <Leader>, :BufferMovePrevious<CR>
+nnoremap <silent> <Leader>. :BufferMoveNext<CR>
+
 
 " Find files using Telescope command-line sugar.
 nnoremap <leader>ff <cmd>Telescope find_files<cr>
 nnoremap <leader>fg <cmd>Telescope live_grep<cr>
 nnoremap <leader>fb <cmd>Telescope buffers<cr>
 nnoremap <leader>fh <cmd>Telescope help_tags<cr>
-
-" ==============================================
-" ALE Settings
-let g:ale_linters = {'python': ['flake8'], 'javascript': ['eslint']}
-let g:ale_fixers = {'python': ['black'], 'javascript': ['prettier', 'eslint'], 'json': ['prettier'], 'rust': 'rustfmt','html': ['prettier']}
-let g:ale_fix_on_save = 1
-let g:ale_rust_cargo_use_clippy = 1
-nnoremap ]c :ALENextWrap<CR>
-nnoremap [c :ALEPreviousWrap<CR>
-let g:ale_sign_error = '‚ùå'
-let g:ale_sign_warning = '‚ö†Ô∏è'
-let g:indentLine_fileTypeExclude = ['markdown']
-let g:ale_linters_explicit = 1
-
-" =============================================
-" Chadtree setting
-nnoremap <leader>g <cmd>CHADopen<cr>
 
 " ==============================================
 
@@ -272,19 +255,59 @@ nnoremap <leader>l :lnext<CR>
 nnoremap <leader>h :lprevious<CR>
 
 " =============================================
-" Language configs
+" Language tooling
 "
-" vim-javascript
+" Ale config =================================
+let g:ale_linters_explicit = 1
+let g:ale_sign_error = '‚ùå'
+let g:ale_sign_warning = '‚ö†Ô∏è'
+let g:ale_fix_on_save = 1
+let g:ale_linters = {'javascript': ['eslint'], 'typescript': ['eslint'],'make': ['checkmake']}
+let g:ale_fixers = { 'javascript': ['prettier', 'eslint'],  'typescript': ['prettier', 'eslint'], 'go':['gofmt'], 'json': ['prettier'], 'rust': ['rustfmt'], 'html': ['prettier'], 'yaml': ['prettier'], 'vue': ['prettier'], 'markdown': ['prettier']}
+nmap <silent> <Leader>k <Plug>(ale_previous_wrap)
+nmap <silent> <Leader>j <Plug>(ale_next_wrap)
+" ==============================================
+
+" vim-javascript setting
 let g:javascript_plugin_flow = 1
 
-" vim-json
+" vim-json setting
 let g:vim_json_syntax_conceal = 0
+
+" " Tree-sitter config
+lua <<EOF
+require'nvim-treesitter.configs'.setup {
+  ensure_installed = "maintained", -- one of "all", "maintained" (parsers with maintainers), or a list of languages
+  highlight = {
+    enable = true,              -- false will disable the whole extension
+  },
+}
+EOF
 
 " =============================================
 " Neovim LSP and its completion configs
 lua << EOF
 require'lspconfig'.gopls.setup{}
 require'lspconfig'.tsserver.setup{}
+require'lspconfig'.dockerls.setup{}
+require'lspconfig'.cssls.setup{}
+require'lspconfig'.vuels.setup{}
+require'lspconfig'.yamlls.setup{}
+local capabilities = vim.lsp.protocol.make_client_capabilities()
+capabilities.textDocument.completion.completionItem.snippetSupport = true
+
+require'lspconfig'.html.setup {
+  capabilities = capabilities,
+}
+require'lspconfig'.jsonls.setup {
+    commands = {
+      Format = {
+        function()
+          vim.lsp.buf.range_formatting({},{0,0},{vim.fn.line("$"),0})
+        end
+      }
+    }
+}
 EOF
 
 autocmd BufEnter * lua require'completion'.on_attach()
@@ -310,3 +333,4 @@ nnoremap <silent> gr    <cmd>lua vim.lsp.buf.references()<CR>
 nnoremap <silent> g0    <cmd>lua vim.lsp.buf.document_symbol()<CR>
 nnoremap <silent> gW    <cmd>lua vim.lsp.buf.workspace_symbol()<CR>
 nnoremap <silent> gd    <cmd>lua vim.lsp.buf.declaration()<CR>
+let g:completion_enable_snippet = 'UltiSnips'
