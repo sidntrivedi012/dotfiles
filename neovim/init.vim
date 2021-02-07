@@ -104,10 +104,9 @@ Plug 'junegunn/fzf', { 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 
 " AESTHETICS
-" Molokai colorscheme
-Plug 'fatih/molokai'
-" Doom Emacs colorscheme, let's try it
-" Plug 'romgrk/doom-one.vim'
+" Molokai colorscheme (alternative)
+" Plug 'fatih/molokai'
+Plug 'tomasiser/vim-code-dark'
 " Lines of Indentation (LOI) :P
 Plug 'Yggdroot/indentLine'
 " The colored file icons
@@ -128,12 +127,11 @@ Plug 'neovim/nvim-lspconfig'
 Plug 'nvim-lua/completion-nvim'
 " Ale to run linters on code and fix
 Plug 'dense-analysis/ale'
+Plug 'prettier/vim-prettier', { 'do': 'yarn install' }
 
 " Language Packs
+Plug 'editorconfig/editorconfig-vim'
 Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
-Plug 'pangloss/vim-javascript'
-Plug 'moll/vim-node'
-Plug 'elzr/vim-json'
 Plug 'ekalinin/Dockerfile.vim'
 Plug 'othree/html5.vim'
 Plug 'godlygeek/tabular'
@@ -148,7 +146,7 @@ syntax on                   " really needed
 let $NVIM_TUI_ENABLE_TRUE_COLOR=1
 set background=dark
 let g:one_allow_italics = 1
-colorscheme molokai
+colorscheme codedark
 syntax on
 
 " ==============================================
@@ -164,7 +162,10 @@ imap <left> <nop>
 imap <right> <nop>
 
 "===============================================
-
+:command WQ wq
+:command Wq wq
+:command W w
+:command Q q
 nnoremap <silent> <C-Right> <c-w>l
 nnoremap <silent> <C-Left> <c-w>h
 nnoremap <silent> <C-Up> <c-w>k
@@ -174,7 +175,7 @@ nnoremap <silent> <C-Down> <c-w>j
 
 " FZF Settings
 " nnoremap <Leader>p :FZF<CR>
-nnoremap <Leader>p :GFiles<CR>
+nnoremap <C-P> :GFiles<CR>
 " Tags based searching
 nnoremap <Leader>t :BTags<CR>
 nnoremap <Leader>T :Tags<CR>
@@ -204,7 +205,7 @@ nnoremap <leader>fh <cmd>Telescope help_tags<cr>
 " LIGHTLINE Settings
 let g:lightline = {
       \ 'active': {
-      \   'left': [ [ 'mode', 'paste' ], [ 'gitbranch', 'readonly', 'filename', 'modified' ] ],
+      \   'left': [ [ 'mode', 'paste' ], [ 'gitbranch', 'readonly', 'filename','modified' ] ],
       \ },
       \ 'tabline': {
       \   'left': [ ['buffers'] ],
@@ -218,7 +219,7 @@ let g:lightline = {
       \ },
       \ 'component_function': {
       \   'gitbranch': 'FugitiveHead',
-      \   'filename': 'LightlineFilename'
+      \   'filename': 'LightlineFilename',
       \ },
       \ 'separator': { 'left': '‚ÆÄ', 'right': '‚ÆÇ' },
       \ 'subseparator': { 'left': '‚ÆÅ', 'right': '‚ÆÉ' }
@@ -325,7 +326,7 @@ set shortmess+=c
 autocmd Filetype * setlocal omnifunc=v:lua.vim.lsp.omnifunc
 
 nnoremap <silent> <c-]> <cmd>lua vim.lsp.buf.definition()<CR>
-nnoremap <silent> K     <cmd>lua vim.lsp.buf.hover()<CR>
+nnoremap <silent> H     <cmd>lua vim.lsp.buf.hover()<CR>
 nnoremap <silent> gD    <cmd>lua vim.lsp.buf.implementation()<CR>
 nnoremap <silent> <c-k> <cmd>lua vim.lsp.buf.signature_help()<CR>
 nnoremap <silent> 1gD   <cmd>lua vim.lsp.buf.type_definition()<CR>
