@@ -18,8 +18,8 @@ set hlsearch
 set conceallevel=0
 set nocompatible
 set clipboard=unnamedplus
-let mapleader = "\<Space>"              " set leader to space
-let maplocalleader = "\<Space>\<Space>" " set local leader to space-space
+let mapleader = ","              " set leader to comma
+let maplocalleader = "," 	" set local leader to ,
 " Scrolling
 set scrolloff=10
 set sidescrolloff=15
@@ -77,10 +77,10 @@ set shiftround
 " add yaml stuffs
 au! BufNewFile,BufReadPost *.{yaml,yml} set filetype=yaml foldmethod=indent
 autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab
-let g:ale_disable_lsp = 1
-
+" let g:ale_disable_lsp = 1
 " ==============================================
 " PLUGINS
+
 call plug#begin()
 
 " Tooling
@@ -90,6 +90,7 @@ Plug 'tpope/vim-sensible'
 Plug 'tpope/vim-fugitive'
 " Sorrounding everything with quotes etc
 Plug 'tpope/vim-surround'                         "
+Plug 'tpope/vim-repeat'
 "Automatic pairing brackets etc.
 Plug 'jiangmiao/auto-pairs'
 " Track changes in files and show diff
@@ -104,15 +105,17 @@ Plug 'junegunn/fzf', { 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 
 " AESTHETICS
-" Molokai colorscheme (alternative)
+" Molokai colorscheme
 " Plug 'fatih/molokai'
+" Doom Emacs colorscheme, let's try it
+" Plug 'romgrk/doom-one.vim'
+" VSCode theme
 Plug 'tomasiser/vim-code-dark'
 " Lines of Indentation (LOI) :P
 Plug 'Yggdroot/indentLine'
 " The colored file icons
 Plug 'kyazdani42/nvim-web-devicons'
 " Improved bufferline, using barbar until it works
-" Plug 'akinsho/nvim-bufferline.lua'
 Plug 'romgrk/barbar.nvim'
 " Telescope for the intuitive UI of file finding etc.
 Plug 'nvim-lua/popup.nvim'
@@ -126,17 +129,17 @@ Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 Plug 'neovim/nvim-lspconfig'
 Plug 'nvim-lua/completion-nvim'
 " Ale to run linters on code and fix
-Plug 'dense-analysis/ale'
-Plug 'prettier/vim-prettier', { 'do': 'yarn install' }
+" Plug 'dense-analysis/ale'
+" Who doesn't need prettier?
+Plug 'prettier/vim-prettier', {
+  \ 'do': 'yarn install',
+  \ 'for': ['javascript', 'typescript', 'css', 'less', 'scss', 'json', 'graphql', 'markdown', 'vue', 'yaml', 'html'] }
 
 " Language Packs
-Plug 'editorconfig/editorconfig-vim'
 Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 Plug 'ekalinin/Dockerfile.vim'
-Plug 'othree/html5.vim'
 Plug 'godlygeek/tabular'
 Plug 'plasticboy/vim-markdown'
-Plug 'cespare/vim-toml'
 call plug#end()
 
 " ==============================================
@@ -162,6 +165,7 @@ imap <left> <nop>
 imap <right> <nop>
 
 "===============================================
+" Mapping :WQ to :wq and :W to :w (typing mistakes)
 :command WQ wq
 :command Wq wq
 :command W w
@@ -174,8 +178,8 @@ nnoremap <silent> <C-Down> <c-w>j
 " USEFUL MAPPINGS
 
 " FZF Settings
-" nnoremap <Leader>p :FZF<CR>
-nnoremap <C-P> :GFiles<CR>
+nnoremap <Leader>p :FZF<CR>
+nnoremap <C-p> :GFiles<CR>
 " Tags based searching
 nnoremap <Leader>t :BTags<CR>
 nnoremap <Leader>T :Tags<CR>
@@ -192,7 +196,6 @@ map <M-Down> :BufferClose<CR>
 " Re-order to previous/next
 nnoremap <silent> <Leader>, :BufferMovePrevious<CR>
 nnoremap <silent> <Leader>. :BufferMoveNext<CR>
-
 
 " Find files using Telescope command-line sugar.
 nnoremap <leader>ff <cmd>Telescope find_files<cr>
@@ -251,31 +254,20 @@ set splitbelow
 set splitright
 
 " =============================================
-" Move easily to the next error
-nnoremap <leader>l :lnext<CR>
-nnoremap <leader>h :lprevious<CR>
-
-" =============================================
 " Language tooling
 "
 " Ale config =================================
-let g:ale_linters_explicit = 1
-let g:ale_sign_error = '‚ùå'
-let g:ale_sign_warning = '‚ö†Ô∏è'
-let g:ale_fix_on_save = 1
-let g:ale_linters = {'javascript': ['eslint'], 'typescript': ['eslint'],'make': ['checkmake']}
-let g:ale_fixers = { 'javascript': ['prettier', 'eslint'],  'typescript': ['prettier', 'eslint'], 'go':['gofmt'], 'json': ['prettier'], 'rust': ['rustfmt'], 'html': ['prettier'], 'yaml': ['prettier'], 'vue': ['prettier'], 'markdown': ['prettier']}
-nmap <silent> <Leader>k <Plug>(ale_previous_wrap)
-nmap <silent> <Leader>j <Plug>(ale_next_wrap)
+" let g:ale_linters_explicit = 1
+" let g:ale_sign_error = '‚ùå'
+" let g:ale_sign_warning = '‚ö†Ô∏è'
+" let g:ale_fix_on_save = 1
+" let g:ale_linters = {'javascript': ['eslint'], 'typescript': ['eslint'],'make': ['checkmake']}
+" let g:ale_fixers = { 'javascript': ['prettier', 'eslint'],  'typescript': ['prettier', 'eslint'], 'go':['gofmt'], 'json': ['prettier'], 'rust': ['rustfmt'], 'html': ['prettier'], 'yaml': ['prettier'], 'vue': ['prettier'], 'markdown': ['prettier']}
+" nmap <silent> <Leader>k <Plug>(ale_previous_wrap)
+" nmap <silent> <Leader>j <Plug>(ale_next_wrap)
 " ==============================================
 
-" vim-javascript setting
-let g:javascript_plugin_flow = 1
-
-" vim-json setting
-let g:vim_json_syntax_conceal = 0
-
-" " Tree-sitter config
+" Tree-sitter config
 lua <<EOF
 require'nvim-treesitter.configs'.setup {
   ensure_installed = "maintained", -- one of "all", "maintained" (parsers with maintainers), or a list of languages
@@ -325,13 +317,22 @@ set shortmess+=c
 
 autocmd Filetype * setlocal omnifunc=v:lua.vim.lsp.omnifunc
 
-nnoremap <silent> <c-]> <cmd>lua vim.lsp.buf.definition()<CR>
+nnoremap <silent> gD    <cmd>lua vim.lsp.buf.definition()<CR>
+nnoremap <silent> gd    <cmd>lua vim.lsp.buf.declaration()<CR>
 nnoremap <silent> H     <cmd>lua vim.lsp.buf.hover()<CR>
-nnoremap <silent> gD    <cmd>lua vim.lsp.buf.implementation()<CR>
-nnoremap <silent> <c-k> <cmd>lua vim.lsp.buf.signature_help()<CR>
-nnoremap <silent> 1gD   <cmd>lua vim.lsp.buf.type_definition()<CR>
+nnoremap <silent> gi <cmd>lua vim.lsp.buf.implementation()<CR>
+nnoremap <silent> <C-h> <cmd>lua vim.lsp.buf.signature_help()<CR>
+nnoremap <silent> gt   <cmd>lua vim.lsp.buf.type_definition()<CR>
 nnoremap <silent> gr    <cmd>lua vim.lsp.buf.references()<CR>
 nnoremap <silent> g0    <cmd>lua vim.lsp.buf.document_symbol()<CR>
 nnoremap <silent> gW    <cmd>lua vim.lsp.buf.workspace_symbol()<CR>
-nnoremap <silent> gd    <cmd>lua vim.lsp.buf.declaration()<CR>
+nnoremap <silent> <Leader>d <cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>
+nnoremap <silent> [d    <cmd>lua vim.lsp.diagnostic.goto_prev()<CR>
+nnoremap <silent> ]d    <cmd>lua vim.lsp.diagnostic.goto_prev()<CR>
+nnoremap <silent> <Leader>q    <cmd>lua vim.lsp.diagnostic.set_loclist()<CR>
+
+nnoremap <silent> <space>wa <cmd>lua vim.lsp.buf.add_workspace_folder()<CR>
+nnoremap <silent> <space>wr <cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>
+nnoremap <silent> <space>rn <cmd>lua vim.lsp.buf.rename()<CR>
+nnoremap <silent> <space>wl <cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>
 let g:completion_enable_snippet = 'UltiSnips'
