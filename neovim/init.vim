@@ -256,6 +256,7 @@ set splitright
 " =============================================
 " Language tooling
 "
+let g:prettier#autoformat = 1
 " Ale config =================================
 " let g:ale_linters_explicit = 1
 " let g:ale_sign_error = '‚ùå'
