@@ -77,7 +77,11 @@ export GPG_TTY=`tty`
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git
+
+export NVM_LAZY_LOAD=true
+export NVM_COMPLETION=true
+plugins=(zsh-nvm
+git
 zsh-autosuggestions
 Zsh-syntax-highlighting
 history-substring-search)
@@ -113,10 +117,11 @@ source $ZSH/oh-my-zsh.sh
 #command line aliases
 alias cl="clear"
 alias srczsh="source ~/.zshrc"
-alias code="open -a Visual\ Studio\ Code.app"
+alias code="code-insiders"
 alias vi="nvim"
 alias vim="nvim"
 alias v="nvim"
+alias bat="bat --style grid,numbers,changes"
 
 #git aliases
 alias gin="git init"
@@ -131,6 +136,7 @@ alias gpu="git pull upstream"
 alias gcob="git checkout -b"
 alias grhard="git reset --hard"
 alias grsoft="git reset	--soft"
+alias k="kubectl"
 
 # The next line updates PATH for the Google Cloud SDK.
 if [ -f '/Users/sidntrivedi012/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/sidntrivedi012/google-cloud-sdk/path.zsh.inc'; fi
@@ -141,14 +147,20 @@ if [ -f '/Users/sidntrivedi012/google-cloud-sdk/completion.zsh.inc' ]; then . '/
 # fzf
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
+# Commenting this heavy script of nvm. God save me.
+
 # Node version manager stuff
-export NVM_DIR="/Users/sidntrivedi012/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-source ~/.nvm/nvm.sh
+# export NVM_DIR="/Users/sidntrivedi012/.nvm"
+# [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+# source ~/.nvm/nvm.sh
 
 # marvin
 export CODE_PATH=/code
 export TOOLBOX_PATH=/toolbox
+export CONFIGPATH=.
+export SECRETSPATH=.
+export COATPATH=.
+export BROKER_URL="amqp://"
 
 # starship tooling
 eval "$(starship init zsh)"
