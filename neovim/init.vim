@@ -103,6 +103,10 @@ Plug 'itchyny/lightline.vim'
 " FZF - The powerful file finder
 Plug 'junegunn/fzf', { 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
+" Directory tree
+Plug 'kyazdani42/nvim-tree.lua'
+" Wakatime
+Plug 'wakatime/vim-wakatime'
 
 " AESTHETICS
 " Molokai colorscheme
@@ -123,6 +127,7 @@ Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim'
 " neovim-treesitter
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+Plug 'f-person/git-blame.nvim'
 
 " LANGUAGE TOOLING
 " Amazing Neovim LSP
@@ -152,6 +157,7 @@ let g:one_allow_italics = 1
 colorscheme codedark
 syntax on
 
+
 " ==============================================
 " Disabling arrow keys ( God help me! )
 map <left> <nop>
@@ -176,7 +182,16 @@ nnoremap <silent> <C-Up> <c-w>k
 nnoremap <silent> <C-Down> <c-w>j
 " ==============================================
 " USEFUL MAPPINGS
+nnoremap <C-n> :NvimTreeToggle<CR>
+nnoremap <leader>r :NvimTreeRefresh<CR>
+nnoremap <leader>n :NvimTreeFindFile<CR>
+let g:nvim_tree_ignore = [ '.git', 'node_modules', '.cache' ]
 
+let g:nvim_tree_show_icons = {
+    \ 'git': 0,
+    \ 'folders': 1,
+    \ 'files': 1,
+    \ }
 " FZF Settings
 nnoremap <Leader>p :FZF<CR>
 nnoremap <C-p> :GFiles<CR>
@@ -203,8 +218,13 @@ nnoremap <leader>fg <cmd>Telescope live_grep<cr>
 nnoremap <leader>fb <cmd>Telescope buffers<cr>
 nnoremap <leader>fh <cmd>Telescope help_tags<cr>
 
-" ==============================================
+" Disable git-blame by default
+let g:gitblame_enabled  = 0
+nnoremap <Leader>g :GitBlameToggle<CR>
 
+" WakatimeToday Binding
+nnoremap <Leader>w :WakaTimeToday<CR>
+" ==============================================
 " LIGHTLINE Settings
 let g:lightline = {
       \ 'active': {
@@ -239,7 +259,6 @@ let g:lightline#bufferline#unicode_symbols = 1
 let g:lightline#bufferline#filename_modifier = ':t'
 
 " ==============================================
-
 " NERDCommenter
 let g:NERDSpaceDelims = 1         " add spaces after comment delimiters
 let g:NERDCompactSexyComs = 1     " use compact syntax for prettified multi-line comments
@@ -255,8 +274,8 @@ set splitright
 
 " =============================================
 " Language tooling
-"
 let g:prettier#autoformat = 1
+
 " Ale config =================================
 " let g:ale_linters_explicit = 1
 " let g:ale_sign_error = '‚ùå'
@@ -283,10 +302,6 @@ EOF
 lua << EOF
 require'lspconfig'.gopls.setup{}
 require'lspconfig'.tsserver.setup{}
-require'lspconfig'.dockerls.setup{}
-require'lspconfig'.cssls.setup{}
-require'lspconfig'.vuels.setup{}
-require'lspconfig'.yamlls.setup{}
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities.textDocument.completion.completionItem.snippetSupport = true
 
@@ -322,7 +337,7 @@ nnoremap <silent> gD    <cmd>lua vim.lsp.buf.definition()<CR>
 nnoremap <silent> gd    <cmd>lua vim.lsp.buf.declaration()<CR>
 nnoremap <silent> H     <cmd>lua vim.lsp.buf.hover()<CR>
 nnoremap <silent> gi <cmd>lua vim.lsp.buf.implementation()<CR>
-nnoremap <silent> <C-h> <cmd>lua vim.lsp.buf.signature_help()<CR>
+nnoremap <silent> <Leader>h <cmd>lua vim.lsp.buf.signature_help()<CR>
 nnoremap <silent> gt   <cmd>lua vim.lsp.buf.type_definition()<CR>
 nnoremap <silent> gr    <cmd>lua vim.lsp.buf.references()<CR>
 nnoremap <silent> g0    <cmd>lua vim.lsp.buf.document_symbol()<CR>
