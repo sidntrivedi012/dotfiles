@@ -152,7 +152,6 @@ set termguicolors           " nice 24 bit colors
 syntax on                   " really needed
 let $NVIM_TUI_ENABLE_TRUE_COLOR=1
 set background=dark
-let g:one_allow_italics = 1
 colorscheme codedark
 syntax on
 
@@ -279,7 +278,9 @@ let g:prettier#autoformat = 1
 " Neovim LSP and its completion configs
 lua << EOF
 require'lspconfig'.gopls.setup{}
-require'lspconfig'.tsserver.setup{}
+require'lspconfig'.tsserver.setup{
+cmd = {"/Users/sidntrivedi012/.nvm/versions/node/v14.15.4/bin/typescript-language-server", "--stdio"}
+}
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities.textDocument.completion.completionItem.snippetSupport = true
 
@@ -334,6 +335,12 @@ nnoremap <silent> <space>wa <cmd>lua vim.lsp.buf.add_workspace_folder()<CR>
 nnoremap <silent> <space>wr <cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>
 nnoremap <silent> <space>rn <cmd>lua vim.lsp.buf.rename()<CR>
 nnoremap <silent> <space>wl <cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>
+
+" Add highlights )red,orange,yellow, green) to LSP error messages
+hi LspDiagnosticsVirtualTextError guifg=red gui=bold,italic,underline
+hi LspDiagnosticsVirtualTextWarning guifg=orange gui=bold,italic,underline
+hi LspDiagnosticsVirtualTextInformation guifg=yellow gui=bold,italic,underline
+hi LspDiagnosticsVirtualTextHint guifg=lightgreen gui=bold,italic,underline
 
 " nvim-compe configuration
 let g:compe = {}
