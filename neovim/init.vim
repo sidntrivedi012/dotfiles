@@ -270,6 +270,10 @@ nnoremap <C-H> <C-W><C-H>
 set splitbelow
 set splitright
 
+nmap <Left> :BufferPrevious<cr>
+nmap <Right> :BufferNext<cr>
+nmap <Down> :BufferClose<cr>
+
 " =============================================
 " Language tooling
 let g:prettier#autoformat = 1
