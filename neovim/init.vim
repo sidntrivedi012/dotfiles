@@ -109,10 +109,6 @@ Plug 'kyazdani42/nvim-tree.lua'
 Plug 'wakatime/vim-wakatime'
 
 " AESTHETICS
-" Molokai colorscheme
-" Plug 'fatih/molokai'
-" Doom Emacs colorscheme, let's try it
-" Plug 'romgrk/doom-one.vim'
 " VSCode theme
 Plug 'tomasiser/vim-code-dark'
 " Lines of Indentation (LOI) :P
@@ -133,14 +129,13 @@ Plug 'neovim/nvim-lspconfig'
 Plug 'hrsh7th/nvim-compe'
 Plug 'hrsh7th/vim-vsnip'
 Plug 'golang/vscode-go'
-" Plug 'nvim-lua/completion-nvim'
+Plug 'chriskempson/base16-vim'
 " Who doesn't need prettier?
 Plug 'prettier/vim-prettier', {
   \ 'do': 'yarn install',
   \ 'for': ['javascript', 'typescript', 'css', 'less', 'scss', 'json', 'graphql', 'markdown', 'vue', 'yaml', 'html'] }
 
 " Language Packs
-Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 Plug 'ekalinin/Dockerfile.vim'
 Plug 'godlygeek/tabular'
 Plug 'plasticboy/vim-markdown'
@@ -150,9 +145,9 @@ let g:go_gopls_enabled=0
 " COLORS
 set termguicolors           " nice 24 bit colors
 syntax on                   " really needed
-let $NVIM_TUI_ENABLE_TRUE_COLOR=1
 set background=dark
 colorscheme codedark
+hi LineNr ctermbg=NONE guibg=NONE
 syntax on
 
 
@@ -242,8 +237,8 @@ let g:lightline = {
       \   'gitbranch': 'FugitiveHead',
       \   'filename': 'LightlineFilename',
       \ },
-      \ 'separator': { 'left': '‚ÆÄ', 'right': '‚ÆÇ' },
-      \ 'subseparator': { 'left': '‚ÆÅ', 'right': '‚ÆÉ' }
+      \ 'separator': { 'left': '√¢¬Æ¬Ä', 'right': '√¢¬Æ¬Ç' },
+      \ 'subseparator': { 'left': '√¢¬Æ¬Å', 'right': '√¢¬Æ¬É' }
       \ }
 
 function! LightlineFilename()
@@ -281,7 +276,18 @@ let g:prettier#autoformat = 1
 " =============================================
 " Neovim LSP and its completion configs
 lua << EOF
-require'lspconfig'.gopls.setup{}
+lspconfig = require "lspconfig"
+  lspconfig.gopls.setup {
+    cmd = {"gopls", "serve"},
+    settings = {
+      gopls = {
+        analyses = {
+          unusedparams = true,
+        },
+        staticcheck = true,
+      },
+    },
+  }
 require'lspconfig'.tsserver.setup{
 cmd = {"/Users/sidntrivedi012/.nvm/versions/node/v14.15.4/bin/typescript-language-server", "--stdio"}
 }
@@ -321,8 +327,8 @@ set shortmess+=c
 
 autocmd Filetype * setlocal omnifunc=v:lua.vim.lsp.omnifunc
 
-nnoremap <silent> gD    <cmd>lua vim.lsp.buf.definition()<CR>
-nnoremap <silent> gd    <cmd>lua vim.lsp.buf.declaration()<CR>
+nnoremap <silent> gd    <cmd>lua vim.lsp.buf.definition()<CR>
+nnoremap <silent> gD    <cmd>lua vim.lsp.buf.declaration()<CR>
 nnoremap <silent> H     <cmd>lua vim.lsp.buf.hover()<CR>
 nnoremap <silent> gi <cmd>lua vim.lsp.buf.implementation()<CR>
 nnoremap <silent> <Leader>h <cmd>lua vim.lsp.buf.signature_help()<CR>
@@ -375,7 +381,10 @@ inoremap <silent><expr> <C-e>     compe#close('<C-e>')
 inoremap <silent><expr> <C-f>     compe#scroll({ 'delta': +4 })
 inoremap <silent><expr> <C-d>     compe#scroll({ 'delta': -4 })
 
+" ===================================================
 " Navigate through completion menu using Tab
+" ===================================================
+
 lua << EOF
 local t = function(str)
   return vim.api.nvim_replace_termcodes(str, true, true, true)
@@ -419,3 +428,40 @@ vim.api.nvim_set_keymap("s", "<Tab>", "v:lua.tab_complete()", {expr = true})
 vim.api.nvim_set_keymap("i", "<S-Tab>", "v:lua.s_tab_complete()", {expr = true})
 vim.api.nvim_set_keymap("s", "<S-Tab>", "v:lua.s_tab_complete()", {expr = true})
 EOF
+
+lua <<EOF
+  -- √â
+
+  function goimports(timeout_ms)
+    local context = { source = { organizeImports = true } }
+    vim.validate { context = { context, "t", true } }
+
+    local params = vim.lsp.util.make_range_params()
+    params.context = context
+
+    -- See the implementation of the textDocument/codeAction callback
+    -- (lua/vim/lsp/handler.lua) for how to do this properly.
+    local result = vim.lsp.buf_request_sync(0, "textDocument/codeAction", params, timeout_ms)
+    if not result or next(result) == nil then return end
+    local actions = result[1].result
+    if not actions then return end
+    local action = actions[1]
+
+    -- textDocument/codeAction can return either Command[] or CodeAction[]. If it
+    -- is a CodeAction, it can have either an edit, a command or both. Edits
+    -- should be executed first.
+    if action.edit or type(action.command) == "table" then
+      if action.edit then
+        vim.lsp.util.apply_workspace_edit(action.edit)
+      end
+      if type(action.command) == "table" then
+        vim.lsp.buf.execute_command(action.command)
+      end
+    else
+      vim.lsp.buf.execute_command(action)
+    end
+  end
+EOF
+
+autocmd BufWritePre *.go lua goimports(1000)
+autocmd BufWritePost * lua vim.lsp.buf.formatting()
