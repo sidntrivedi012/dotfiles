@@ -111,12 +111,15 @@ Plug 'wakatime/vim-wakatime'
 " AESTHETICS
 " VSCode theme
 Plug 'tomasiser/vim-code-dark'
+" Good old molokai
+Plug 'fatih/molokai'
 " Lines of Indentation (LOI) :P
 Plug 'Yggdroot/indentLine'
 " The colored file icons
 Plug 'kyazdani42/nvim-web-devicons'
 " Improved bufferline, using barbar until it works
-Plug 'romgrk/barbar.nvim'
+" Plug 'romgrk/barbar.nvim'
+Plug 'mengelbrecht/lightline-bufferline'
 " Telescope for the intuitive UI of file finding etc.
 Plug 'nvim-lua/popup.nvim'
 Plug 'nvim-lua/plenary.nvim'
@@ -140,13 +143,12 @@ Plug 'ekalinin/Dockerfile.vim'
 Plug 'godlygeek/tabular'
 Plug 'plasticboy/vim-markdown'
 call plug#end()
-let g:go_gopls_enabled=0
 " ==============================================
 " COLORS
 set termguicolors           " nice 24 bit colors
 syntax on                   " really needed
 set background=dark
-colorscheme codedark
+colorscheme molokai
 hi LineNr ctermbg=NONE guibg=NONE
 syntax on
 
@@ -197,14 +199,6 @@ nnoremap <silent> <Esc><Esc> <Esc>:nohlsearch<CR><Esc>
 map <Leader>b :Buffers<CR>
 nnoremap <Leader>h :History<CR>
 
-" Buffer switching and closing
-map <M-Left> :bp<CR>
-map <M-Right> :bn<CR>
-map <M-Down> :BufferClose<CR>
-" Re-order to previous/next
-nnoremap <silent> <Leader>, :BufferMovePrevious<CR>
-nnoremap <silent> <Leader>. :BufferMoveNext<CR>
-
 " Find files using Telescope command-line sugar.
 nnoremap <leader>ff <cmd>Telescope find_files<cr>
 nnoremap <leader>fg <cmd>Telescope live_grep<cr>
@@ -245,11 +239,23 @@ function! LightlineFilename()
   return expand('%')
 endfunction
 
+autocmd BufWritePost,TextChanged,TextChangedI * call lightline#update()
 let g:lightline#bufferline#enable_devicons = 1
 let g:lightline#bufferline#show_number = 2
 let g:lightline#bufferline#enable_nerdfont = 1
 let g:lightline#bufferline#unicode_symbols = 1
 let g:lightline#bufferline#filename_modifier = ':t'
+
+nmap <Leader>1 <Plug>lightline#bufferline#go(1)
+nmap <Leader>2 <Plug>lightline#bufferline#go(2)
+nmap <Leader>3 <Plug>lightline#bufferline#go(3)
+nmap <Leader>4 <Plug>lightline#bufferline#go(4)
+nmap <Leader>5 <Plug>lightline#bufferline#go(5)
+nmap <Leader>6 <Plug>lightline#bufferline#go(6)
+nmap <Leader>7 <Plug>lightline#bufferline#go(7)
+nmap <Leader>8 <Plug>lightline#bufferline#go(8)
+nmap <Leader>9 <Plug>lightline#bufferline#go(9)
+nmap <Leader>0 <Plug>lightline#bufferline#go(10)
 
 " ==============================================
 " NERDCommenter
@@ -265,9 +271,9 @@ nnoremap <C-H> <C-W><C-H>
 set splitbelow
 set splitright
 
-nmap <Left> :BufferPrevious<cr>
-nmap <Right> :BufferNext<cr>
-nmap <Down> :BufferClose<cr>
+nmap <Left> :bprevious<cr>
+nmap <Right> :bnext<cr>
+nmap <Down> :bdelete<cr>
 
 " =============================================
 " Language tooling
@@ -279,14 +285,6 @@ lua << EOF
 lspconfig = require "lspconfig"
   lspconfig.gopls.setup {
     cmd = {"gopls", "serve"},
-    settings = {
-      gopls = {
-        analyses = {
-          unusedparams = true,
-        },
-        staticcheck = true,
-      },
-    },
   }
 require'lspconfig'.tsserver.setup{
 cmd = {"/Users/sidntrivedi012/.nvm/versions/node/v14.15.4/bin/typescript-language-server", "--stdio"}
