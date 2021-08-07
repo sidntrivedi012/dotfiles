@@ -1,6 +1,7 @@
 " ==============================================
 " Generic configs
 set number            " set numbers
+set hidden
 set nowrap            " no wrapping please
 set mouse=a           " ain't a Vimmer yet
 set relativenumber
@@ -107,51 +108,52 @@ Plug 'junegunn/fzf.vim'
 Plug 'kyazdani42/nvim-tree.lua'
 " Wakatime
 Plug 'wakatime/vim-wakatime'
+Plug 'lukas-reineke/indent-blankline.nvim'
 
 " AESTHETICS
-" VSCode theme
-Plug 'tomasiser/vim-code-dark'
 " Good old molokai
-Plug 'fatih/molokai'
-" Lines of Indentation (LOI) :P
-Plug 'Yggdroot/indentLine'
+" Plug 'fatih/molokai'
+Plug 'gruvbox-community/gruvbox'
+" Plug 'joshdick/onedark.vim'
+" Plug 'chriskempson/base16-vim'
 " The colored file icons
 Plug 'kyazdani42/nvim-web-devicons'
 " Improved bufferline, using barbar until it works
-" Plug 'romgrk/barbar.nvim'
-Plug 'mengelbrecht/lightline-bufferline'
+Plug 'romgrk/barbar.nvim'
 " Telescope for the intuitive UI of file finding etc.
 Plug 'nvim-lua/popup.nvim'
 Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim'
 Plug 'f-person/git-blame.nvim'
-
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 " LANGUAGE TOOLING
 " Amazing Neovim LSP
 Plug 'neovim/nvim-lspconfig'
 Plug 'hrsh7th/nvim-compe'
 Plug 'hrsh7th/vim-vsnip'
 Plug 'golang/vscode-go'
-Plug 'chriskempson/base16-vim'
-" Who doesn't need prettier?
+" Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 Plug 'prettier/vim-prettier', {
   \ 'do': 'yarn install',
-  \ 'for': ['javascript', 'typescript', 'css', 'less', 'scss', 'json', 'graphql', 'markdown', 'vue', 'yaml', 'html'] }
-
+  \ 'for': ['javascript', 'typescript', 'css', 'less', 'scss', 'json', 'graphql', 'markdown', 'vue', 'svelte', 'yaml', 'html'] }
 " Language Packs
 Plug 'ekalinin/Dockerfile.vim'
 Plug 'godlygeek/tabular'
 Plug 'plasticboy/vim-markdown'
 call plug#end()
+" let g:go_gopls_enabled = 0
 " ==============================================
 " COLORS
 set termguicolors           " nice 24 bit colors
 syntax on                   " really needed
 set background=dark
-colorscheme molokai
+colorscheme gruvbox
+" let base16colorspace=256
 hi LineNr ctermbg=NONE guibg=NONE
+" Brighter comments
+" call Base16hi("Comment", g:base16_gui09, "", g:base16_cterm09, "", "", "")
 syntax on
-
+let g:indent_blankline_show_trailing_blankline_indent = "false"
 
 " ==============================================
 " Disabling arrow keys ( God help me! )
@@ -175,6 +177,9 @@ nnoremap <silent> <C-Right> <c-w>l
 nnoremap <silent> <C-Left> <c-w>h
 nnoremap <silent> <C-Up> <c-w>k
 nnoremap <silent> <C-Down> <c-w>j
+tnoremap <Esc> <C-\><C-n>
+nnoremap <leader>vt :vsplit term://zsh<CR>
+nnoremap <leader>st :split term://zsh<CR>
 " ==============================================
 " USEFUL MAPPINGS
 nnoremap <C-n> :NvimTreeToggle<CR>
@@ -207,10 +212,10 @@ nnoremap <leader>fh <cmd>Telescope help_tags<cr>
 
 " Disable git-blame by default
 let g:gitblame_enabled  = 0
-nnoremap <Leader>g :GitBlameToggle<CR>
 
 " WakatimeToday Binding
 nnoremap <Leader>w :WakaTimeToday<CR>
+
 " ==============================================
 " LIGHTLINE Settings
 let g:lightline = {
@@ -231,31 +236,29 @@ let g:lightline = {
       \   'gitbranch': 'FugitiveHead',
       \   'filename': 'LightlineFilename',
       \ },
-      \ 'separator': { 'left': '√¢¬Æ¬Ä', 'right': '√¢¬Æ¬Ç' },
-      \ 'subseparator': { 'left': '√¢¬Æ¬Å', 'right': '√¢¬Æ¬É' }
       \ }
 
 function! LightlineFilename()
   return expand('%')
 endfunction
 
-autocmd BufWritePost,TextChanged,TextChangedI * call lightline#update()
-let g:lightline#bufferline#enable_devicons = 1
-let g:lightline#bufferline#show_number = 2
-let g:lightline#bufferline#enable_nerdfont = 1
-let g:lightline#bufferline#unicode_symbols = 1
-let g:lightline#bufferline#filename_modifier = ':t'
+" let g:lightline#bufferline#enable_devicons = 1
+" let g:lightline#bufferline#show_number = 2
+" let g:lightline#bufferline#enable_nerdfont = 1
+" let g:lightline#bufferline#unicode_symbols = 1
+" let g:lightline#bufferline#filename_modifier = ':t'
 
-nmap <Leader>1 <Plug>lightline#bufferline#go(1)
-nmap <Leader>2 <Plug>lightline#bufferline#go(2)
-nmap <Leader>3 <Plug>lightline#bufferline#go(3)
-nmap <Leader>4 <Plug>lightline#bufferline#go(4)
-nmap <Leader>5 <Plug>lightline#bufferline#go(5)
-nmap <Leader>6 <Plug>lightline#bufferline#go(6)
-nmap <Leader>7 <Plug>lightline#bufferline#go(7)
-nmap <Leader>8 <Plug>lightline#bufferline#go(8)
-nmap <Leader>9 <Plug>lightline#bufferline#go(9)
-nmap <Leader>0 <Plug>lightline#bufferline#go(10)
+" nmap <Leader>1 <Plug>lightline#bufferline#go(1)
+" nmap <Leader>2 <Plug>lightline#bufferline#go(2)
+" nmap <Leader>3 <Plug>lightline#bufferline#go(3)
+" nmap <Leader>4 <Plug>lightline#bufferline#go(4)
+" nmap <Leader>5 <Plug>lightline#bufferline#go(5)
+" nmap <Leader>6 <Plug>lightline#bufferline#go(6)
+" nmap <Leader>7 <Plug>lightline#bufferline#go(7)
+" nmap <Leader>8 <Plug>lightline#bufferline#go(8)
+" nmap <Leader>9 <Plug>lightline#bufferline#go(9)
+" nmap <Leader>0 <Plug>lightline#bufferline#go(10)
+
 
 " ==============================================
 " NERDCommenter
@@ -271,9 +274,9 @@ nnoremap <C-H> <C-W><C-H>
 set splitbelow
 set splitright
 
-nmap <Left> :bprevious<cr>
-nmap <Right> :bnext<cr>
-nmap <Down> :bdelete<cr>
+nmap <Left> :BufferPrevious<cr>
+nmap <Right> :BufferNext<cr>
+nmap <Down> :BufferClose<cr>
 
 " =============================================
 " Language tooling
@@ -463,3 +466,11 @@ EOF
 
 autocmd BufWritePre *.go lua goimports(1000)
 autocmd BufWritePost * lua vim.lsp.buf.formatting()
+lua <<EOF
+require'nvim-treesitter.configs'.setup {
+  ensure_installed = {"go","javascript","toml"}, -- one of "all", "maintained" (parsers with maintainers), or a list of languages
+  highlight = {
+    enable = true,              -- false will disable the whole extension
+  },
+}
+E
