@@ -5,6 +5,12 @@ export GOPATH=$HOME/go
 export PATH=$GOPATH/bin:$PATH
 export PATH="/usr/local/opt/grep/libexec/gnubin:$PATH"
 
+export PATH="$HOME/.pyenv/bin:$PATH"
+export PATH="/usr/local/bin:$PATH"
+
+eval "$(pyenv init -)"
+eval "$(pyenv virtualenv-init -)"
+
 # Path to your oh-my-zsh installation.
 export ZSH="/Users/sidntrivedi012/.oh-my-zsh"
 
@@ -84,7 +90,8 @@ plugins=(zsh-nvm
 git
 zsh-autosuggestions
 Zsh-syntax-highlighting
-history-substring-search)
+history-substring-search
+zsh-z)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -122,7 +129,7 @@ alias vi="nvim"
 alias vim="nvim"
 alias v="nvim"
 alias bat="bat --style grid,numbers,changes"
-
+# alias pip=pip3
 #git aliases
 alias gin="git init"
 alias glog="git log --oneline"
@@ -137,6 +144,7 @@ alias gcob="git checkout -b"
 alias grhard="git reset --hard"
 alias grsoft="git reset	--soft"
 alias k="kubectl"
+alias gob="go build ."
 
 # The next line updates PATH for the Google Cloud SDK.
 if [ -f '/Users/sidntrivedi012/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/sidntrivedi012/google-cloud-sdk/path.zsh.inc'; fi
@@ -155,23 +163,19 @@ if [ -f '/Users/sidntrivedi012/google-cloud-sdk/completion.zsh.inc' ]; then . '/
 # source ~/.nvm/nvm.sh
 
 # marvin
-export CODE_PATH=/code
-export TOOLBOX_PATH=/toolbox
+export CODE_PATH=~/codes
+export TOOLBOX_PATH=~/toolbox
 export CONFIGPATH=.
 export SECRETSPATH=.
 export COATPATH=.
 export BROKER_URL="amqp://"
+export RESULT_RMQ_URL="amqp://"
 
 # starship tooling
 eval "$(starship init zsh)"
 export STARSHIP_CONFIG=~/.config/starship.toml
 export STARSHIP_CACHE=~/.starship/cache
 
-# asgard
-if command -v pyenv 1>/dev/null 2>&1; then
-  eval "$(pyenv init -)"
-fi
 
-export PATH="$HOME/.pyenv/bin:$PATH"
+PATH=$(pyenv root)/shims:$PATH
 eval "$(pyenv init -)"
-eval "$(pyenv virtualenv-init -)"
