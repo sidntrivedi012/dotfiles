@@ -222,6 +222,8 @@ nnoremap <Leader>T :Tags<CR>
 
 " Disable git-blame by default
 let g:gitblame_enabled  = 0
+" Enable prettier autoformat
+let g:prettier#autoformat = 1
 
 " ==============================================
 " NERDCommenter
@@ -229,14 +231,8 @@ let g:NERDSpaceDelims = 1         " add spaces after comment delimiters
 let g:NERDCompactSexyComs = 1     " use compact syntax for prettified multi-line comments
 let g:NERDDefaultAlign = 'left'   " align line-wise comment delimiters flush left instead of following code indentation
 
-
-" =============================================
-" Language tooling
-let g:prettier#autoformat = 1
-
 " ==============================================
 " LIGHTLINE Settings
-
 let g:lightline = {
       \ 'active': {
       \   'left': [ [ 'mode', 'paste' ], [ 'gitbranch', 'readonly', 'filename','modified' ] ],
