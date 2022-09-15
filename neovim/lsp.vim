@@ -5,6 +5,12 @@ lua <<EOF
 local on_attach = function(client, bufnr)
   local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
   local function buf_set_option(...) vim.api.nvim_buf_set_option(bufnr, ...) end
+  if vim.bo[bufnr].buftype ~= "" or vim.bo[bufnr].filetype == "helm" then
+      vim.diagnostic.disable(bufnr)
+      vim.defer_fn(function()
+        vim.diagnostic.reset(nil, bufnr)
+      end, 1000)
+    end
 
   -- Enable completion triggered by <c-x><c-o>
   buf_set_option('omnifunc', 'v:lua.vim.lsp.omnifunc')
@@ -59,6 +65,17 @@ require("lspconfig").gopls.setup(
     }
 )
 
+require('lspconfig').yamlls.setup {
+    on_attach = on_attach,
+    settings = {
+        yaml = {
+            	schemas = {
+                	["https://raw.githubusercontent.com/instrumenta/kubernetes-json-schema/master/v1.18.0-standalone-strict/all.json"] = "/*.yaml"
+            	}
+        }
+    },
+}
+
 require("lspconfig").rust_analyzer.setup(
     {
 	on_attach = on_attach,
@@ -79,10 +96,30 @@ require("lspconfig").tsserver.setup {
 	capabilities = capabilities
 }
 
+-- python
 require("lspconfig").pyright.setup {
 	on_attach = on_attach,
-	capabilities = capabilities
+	capabilities = capabilities,
+	settings = {
+		pyright = {
+			typeCheckingMode = "off",
+			python = {
+				pythonPath = "/Users/phoenix/Code/deepsource/asgard/venv/bin/python",
+				venvPath = "/Users/phoenix/Code/deepsource/asgard/venv",
+				analysis = {
+					diagnosticMode = "openFilesOnly",
+					stubPath = "./typings",
+					autoSearchPaths = true,
+					useLibraryCodeForTypes = true,
+					autoImportCompletions = true,
+					completeFunctionParens = false,
+				},
+			},
+		},
+	},
 }
+
+
 
 require'lspconfig'.html.setup {
 	capabilities = capabilities,
@@ -97,28 +134,39 @@ require'lspconfig'.jsonls.setup {
       		}
 	}
 }
-EOF
 
-" goimports hack
-lua << EOF
-function org_imports(wait_ms)
-      local params = vim.lsp.util.make_range_params()
-      params.context = {only = {"source.organizeImports"}}
-      local result = vim.lsp.buf_request_sync(0, "textDocument/codeAction", params, wait_ms)
-      for _, res in pairs(result or {}) do
-        for _, r in pairs(res.result or {}) do
-          if r.edit then
-            vim.lsp.util.apply_workspace_edit(r.edit)
-          else
-            vim.lsp.buf.execute_command(r.command)
-          end
+-- Automatically organize imports using code actions on saving buffer
+function org_imports()
+  local clients = vim.lsp.buf_get_clients()
+  for _, client in pairs(clients) do
+    local params = vim.lsp.util.make_range_params(nil, client.offset_encoding)
+    params.context = {only = {"source.organizeImports"}}
+
+    local result = vim.lsp.buf_request_sync(0, "textDocument/codeAction", params, 5000)
+    for _, res in pairs(result or {}) do
+      for _, r in pairs(res.result or {}) do
+        if r.edit then
+          vim.lsp.util.apply_workspace_edit(r.edit, client.offset_encoding)
+        else
+          vim.lsp.buf.execute_command(r.command)
         end
       end
+    end
   end
+end
 
+-- Auto-format on save autocmd
+vim.api.nvim_create_autocmd("BufWritePre", {
+  pattern = { "*.go" },
+  callback = function()
+	  vim.lsp.buf.formatting_sync(nil, 3000)
+  end,
+})
+
+-- Organize imports autocmd
+vim.api.nvim_create_autocmd("BufWritePre", {
+  pattern = { "*.go" },
+  callback = org_imports,
+})
 EOF
 
-" Run formatting on every write
-autocmd BufWritePre *.go :silent! lua vim.lsp.buf.formatting()
-" Run `org_import` func to do the `organizeImports` thing
-autocmd BufWritePre *.go :silent! lua org_imports(3000)
