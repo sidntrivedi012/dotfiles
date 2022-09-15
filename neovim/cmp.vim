@@ -175,3 +175,4 @@ local kind_icons = {
     TypeParameter = "?"
 }
 EOF
+
