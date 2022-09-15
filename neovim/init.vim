@@ -57,7 +57,7 @@ au bufnewfile,bufread *.c
 			\ set autoindent |
 			\ set fileformat=unix
 
-au BufNewFile,BufRead *.js,*.vue,*.html,*.css,*.yml,*.json
+au BufNewFile,BufRead *.js,*.vue,*.html,*.css,*.yml,*.yaml,*.json
 			\ set tabstop=2 |
 			\ set softtabstop=2 |
 			\ set shiftwidth=2 |
@@ -76,12 +76,8 @@ if has('persistent_undo')      "check if your vim version supports it
 
 " Indentation
 set smartindent
-set smarttab
 set shiftround
 
-" add yaml stuffs
-au! BufNewFile,BufReadPost *.{yaml,yml} set filetype=yaml foldmethod=indent
-autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab
 " ==============================================
 " PLUGINS
 
@@ -111,6 +107,7 @@ Plug 'lukas-reineke/indent-blankline.nvim'
 
 " AESTHETICS
 Plug 'gruvbox-community/gruvbox'
+Plug 'projekt0n/github-nvim-theme'
 " The colored file icons
 Plug 'kyazdani42/nvim-web-devicons'
 " Improved bufferline, using barbar until it works
@@ -133,13 +130,15 @@ Plug 'hrsh7th/nvim-cmp'
 Plug 'hrsh7th/cmp-vsnip'
 Plug 'hrsh7th/vim-vsnip'
 Plug 'onsails/lspkind-nvim'
+Plug 'towolf/vim-helm'
+Plug 'redhat-developer/vscode-yaml'
 
 Plug 'golang/vscode-go'
 Plug 'psf/black', { 'branch': 'stable' }
 " Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 Plug 'prettier/vim-prettier', {
   \ 'do': 'npm install',
-  \ 'for': ['javascript', 'typescript', 'css', 'less', 'scss', 'json', 'graphql', 'markdown', 'vue', 'svelte', 'yaml', 'html'] }
+  \ 'for': ['javascript', 'typescript', 'css', 'less', 'scss', 'json', 'graphql', 'markdown', 'vue', 'svelte', 'html'] }
 Plug 'dense-analysis/ale'
 " Language Packs
 Plug 'ekalinin/Dockerfile.vim'
@@ -158,6 +157,14 @@ let g:ale_fix_on_save = 1
 set termguicolors           " nice 24 bit colors
 syntax on                   " really needed
 set background=dark
+" let g:github_function_style = "bold"
+" let g:github_keyword_style = "bold"
+" let g:github_msg_area_style = "bold"
+" let g:github_variable_style = "bold"
+" let g:github_comment_style = "NONE"
+" let g:github_dark_float = "true"
+" let g:github_sidebars = ["qf", "vista_kind", "terminal", "packer"]
+" colorscheme github_light_default
 colorscheme gruvbox
 hi LineNr ctermbg=NONE guibg=NONE
 syntax on
@@ -165,6 +172,13 @@ let g:indent_blankline_show_trailing_blankline_indent = "false"
 
 " ==============================================
 " USEFUL MAPPINGS
+
+" Nvim tree
+lua<<EOF
+-- empty setup using defaults
+require("nvim-tree").setup()
+EOF
+
 
 " Disabling arrow keys ( God help me! )
 map <left> <nop>
@@ -196,12 +210,16 @@ nnoremap <leader>st :split term://zsh<CR>
 nnoremap <silent> <Esc><Esc> <Esc>:nohlsearch<CR><Esc>
 map <Leader>b :Buffers<CR>
 nnoremap <Leader>h :History<CR>
+nnoremap <C-n> :NvimTreeToggle<cr>
 
 " Find files using Telescope command-line sugar.
 nnoremap <leader>ff <cmd>Telescope find_files<cr>
 nnoremap <leader>fg <cmd>Telescope live_grep<cr>
 nnoremap <leader>fb <cmd>Telescope buffers<cr>
 nnoremap <leader>fh <cmd>Telescope help_tags<cr>
+nnoremap <leader>gr <cmd>lua require('telescope.builtin').lsp_references()<cr>
+nnoremap <leader>d <cmd>lua require('telescope.builtin').diagnostics()<cr>
+nnoremap <leader>gd <cmd>lua require('telescope.builtin').lsp_definitions()<cr>
 
 nnoremap <C-J> <C-W><C-J>
 nnoremap <C-K> <C-W><C-K>
@@ -252,6 +270,13 @@ let g:lightline = {
       \   'filename': 'LightlineFilename',
       \ },
       \ }
+" ===================================================
+
+lua<<EOF
+require("indent_blankline").setup {}
+EOF
+
+
 
 function! LightlineFilename()
   return expand('%')
@@ -261,3 +286,4 @@ endfunction
 source ~/.config/nvim/cmp.vim
 source ~/.config/nvim/lsp.vim
 source ~/.config/nvim/treesitter.vim
+
